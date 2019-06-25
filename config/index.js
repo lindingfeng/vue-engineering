@@ -2,30 +2,47 @@
 // Template version: 1.3.1
 // see http://vuejs-templates.github.io/webpack for documentation.
 
+const minimist = require('minimist')
 const path = require('path')
+const chalk = require('chalk')
 
+const getParamFromCLI = function(cliName) {
+  const args = minimist(process.argv.slice(2));
+  if (cliName) {
+    return args[cliName];
+  } else {
+    return args;
+  }
+}
+
+let projectName = getParamFromCLI('projectname') || getParamFromCLI()._[0];
+
+if (!projectName) {
+  console.log(chalk.red('请输入需要运行的project. eg: npm run dev --projectname demo'));
+  process.exit(0);
+}
+
+process.env.projectName = projectName
+
+const entry = 'main.js';
+const publicPath = `/${projectName}/`;
+const template = path.resolve(__dirname, `../src/projects/${projectName}/index.html`);
 module.exports = {
   dev: {
-
+    projectName,
+    template,
+    entry: `./src/projects/${projectName}/${entry}`,
     // Paths
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsPublicPath: `/dist/${projectName}/`,
     proxyTable: {},
-
-    // Various Dev Server settings
-    host: 'localhost', // can be overwritten by process.env.HOST
-    port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
-    autoOpenBrowser: false,
+    host: '0.0.0.0', // can be overwritten by process.env.HOST
+    port: 8090, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
+    autoOpenBrowser: true,
     errorOverlay: true,
     notifyOnErrors: true,
     poll: false, // https://webpack.js.org/configuration/dev-server/#devserver-watchoptions-
-
-    // Use Eslint Loader?
-    // If true, your code will be linted during bundling and
-    // linting errors and warnings will be shown in the console.
-    useEslint: true,
-    // If true, eslint errors and warnings will also be shown in the error overlay
-    // in the browser.
+    useEslint: false,
     showEslintErrorsInOverlay: false,
 
     /**
@@ -45,12 +62,12 @@ module.exports = {
 
   build: {
     // Template for index.html
-    index: path.resolve(__dirname, '../dist/index.html'),
+    index: path.resolve(__dirname, `../dist/${projectName}/index.html`),
 
     // Paths
-    assetsRoot: path.resolve(__dirname, '../dist'),
+    assetsRoot: path.resolve(__dirname, `../dist/${projectName}`),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsPublicPath: publicPath,
 
     /**
      * Source Maps

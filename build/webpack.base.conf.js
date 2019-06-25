@@ -22,7 +22,7 @@ const createLintingRule = () => ({
 module.exports = {
   context: path.resolve(__dirname, '../'),
   entry: {
-    app: './src/main.js'
+    app: config.dev.entry
   },
   output: {
     path: config.build.assetsRoot,
@@ -36,6 +36,7 @@ module.exports = {
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
       '@': resolve('src'),
+      '@@': resolve(`./src/projects/${process.env.projectName}`)
     }
   },
   module: {
@@ -52,8 +53,17 @@ module.exports = {
         include: [resolve('src'), resolve('test'), resolve('node_modules/webpack-dev-server/client')]
       },
       {
+        test: /\.svg$/,
+        loader: 'svg-sprite-loader',
+        include: [resolve(`./src/projects/${process.env.projectName}/icons`)],
+        options: {
+          symbolId: 'icon-[name]'
+        }
+      },
+      {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: 'url-loader',
+        exclude: [resolve(`./src/projects/${process.env.projectName}/icons`)],
         options: {
           limit: 10000,
           name: utils.assetsPath('img/[name].[hash:7].[ext]')

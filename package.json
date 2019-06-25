@@ -1,18 +1,27 @@
 {
-  "name": "vue-engineering",
+  "name": "vue-demo",
   "version": "1.0.0",
   "description": "A Vue.js project",
   "author": "lindingfeng <1758765238@qq.com>",
   "private": true,
   "scripts": {
-    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
+    "dev": "node build/dev-server.js",
+    "dev1": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "start": "npm run dev",
     "lint": "eslint --ext .js,.vue src",
     "build": "node build/build.js"
   },
   "dependencies": {
+    "axios": "^0.18.0",
+    "vant": "^2.0.2",
+    "element-ui": "2.4.6",
+    "babel-polyfill": "^6.26.0",
+    "js-cookie": "2.2.0",
+    "normalize.css": "7.0.0",
+    "nprogress": "0.2.0",
     "vue": "^2.5.2",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "vuex": "3.0.1"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
@@ -41,6 +50,7 @@
     "file-loader": "^1.1.4",
     "friendly-errors-webpack-plugin": "^1.6.1",
     "html-webpack-plugin": "^2.30.1",
+    "minimist": "^1.2.0",
     "node-notifier": "^5.1.2",
     "optimize-css-assets-webpack-plugin": "^3.2.0",
     "ora": "^1.2.0",
@@ -59,7 +69,11 @@
     "webpack": "^3.6.0",
     "webpack-bundle-analyzer": "^2.9.0",
     "webpack-dev-server": "^2.9.1",
-    "webpack-merge": "^4.1.0"
+    "webpack-merge": "^4.1.0",
+    "echarts": "^4.1.0",
+    "sass-loader": "7.0.3",
+    "node-sass": "^4.7.2",
+    "svg-sprite-loader": "3.8.0"
   },
   "engines": {
     "node": ">= 6.0.0",
