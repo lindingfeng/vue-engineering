@@ -42,15 +42,15 @@
 ## Build Setup
 
 ``` bash
-# install dependencies
+# 安装项目依赖
 yarn install
 
-# serve with hot reload at ip:8090
+# 开发环境启动项目
 npm run dev demo
 
-# build for production with minification
+# 生产环境构建项目
 npm run build demo
 
-# build for production and view the bundle analyzer report
+# 生产环境构建项目并生成报告
 npm run build demo --report
 ```
