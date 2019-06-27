@@ -18,16 +18,18 @@ const getParamFromCLI = function(cliName) {
 let projectName = getParamFromCLI('projectname') || getParamFromCLI()._[0];
 
 if (!projectName) {
-  console.log(chalk.red('请输入需要运行的project. eg: npm run dev --projectname demo'));
+  console.log(chalk.red('请输入需要运行的项目名. eg: npm run dev 项目名'));
   process.exit(0);
 }
 
 process.env.projectName = projectName
 
 const entry = 'main.js';
+const projectConfig = require(`../src/projects/${projectName}/project.config.js`);
 const publicPath = `/${projectName}/`;
-const template = path.resolve(__dirname, `../src/projects/${projectName}/index.html`);
+const template = projectConfig.useRem ? path.resolve(__dirname, `../src/projects/${projectName}/template/index.mobile.html`) : path.resolve(__dirname, `../src/projects/${projectName}/template/index.pc.html`);
 module.exports = {
+  projectConfig,
   dev: {
     projectName,
     template,

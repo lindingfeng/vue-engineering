@@ -41,6 +41,7 @@ exports.cssLoaders = function (options) {
         })
       })
     }
+    // console.log('loaders：', JSON.stringify(loaders))
 
     // Extract CSS when that option is specified
     // (which is the case during production build)

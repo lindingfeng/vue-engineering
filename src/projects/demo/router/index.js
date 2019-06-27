@@ -6,6 +6,7 @@ import Animation from '@@/pages/animation'
 Vue.use(Router)
 
 export default new Router({
+  // base: '/demo/',
   routes: [
     {
       path: '/',
