@@ -39,6 +39,10 @@ module.exports = {
       '@@': resolve(`./src/projects/${process.env.projectName}`)
     }
   },
+  // externals: {
+  //   'vue': 'Vue',
+  //   'vue-router': 'VueRouter'
+  // },
   module: {
     rules: [
       ...(config.dev.useEslint ? [createLintingRule()] : []),

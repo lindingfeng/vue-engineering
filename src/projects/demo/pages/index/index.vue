@@ -3,6 +3,7 @@
     <!-- <div class="content">
       <div class="font">666</div>
     </div> -->
+    <van-button type="primary" @click="$router.push('animation')">go</van-button>
     <van-button type="primary" @click="showPicker = !showPicker">主要按钮</van-button>
     <van-popup v-model="showPicker" position="bottom">
       <van-picker
@@ -17,19 +18,15 @@
 
 <script>
 import Vue from 'vue'
-import Button from 'vant/lib/button'
-import Picker from 'vant/lib/Picker'
-import Popup from 'vant/lib/Popup'
-import Field from 'vant/lib/Field'
-import 'vant/lib/button/style'
-import 'vant/lib/Picker/style'
-import 'vant/lib/Popup/style'
-import 'vant/lib/Field/style'
-Vue.use(Button)
-Vue.use(Picker)
-Vue.use(Popup)
-Vue.use(Field)
+import { Button, Picker, Popup, Dialog } from 'vant'
+// Vue.use(Button).use(Picker).use(Popup)
 export default {
+  components: {
+    [Button.name]: Button,
+    [Picker.name]: Picker,
+    [Dialog.name]: Dialog,
+    [Popup.name]: Popup
+  },
   data () {
     return {
       showPicker: false,

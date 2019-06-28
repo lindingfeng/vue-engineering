@@ -16,6 +16,9 @@ export default {
   less：yarn add less-loader -D
 -->
 <style lang="postcss">
+.hidden {
+  overflow: hidden !important;
+}
 body, p, ul {
   padding: 0;
   margin: 0;

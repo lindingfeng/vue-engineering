@@ -1,29 +1,61 @@
 <template>
   <div class="index-page">
-    <van-button type="primary" @click="show = !show">主要按钮</van-button>
+    <!-- <div style="height: 500px;"></div> -->
+    <van-button type="primary" @click="show = !show">ActionSheet按钮</van-button>
+    <van-button type="primary" @click="showPicker = !showPicker">Picker按钮</van-button>
+    <van-action-sheet
+      v-model="showPicker"
+      :actions="actions"
+      :lock-scroll="false"
+      @select="showPicker = !showPicker"
+    />
     <transition name="fade-translateY">
-      <div class="lin-action-sheet bottom-sheet" v-show="show">
-        <div class="item"></div>
-        <div class="item"></div>
-        <div class="item"></div>
+      <div class="lin-action-sheet bottom-sheet" v-show="show" @touchmove.stop>
+        <div v-for="(item, index) in 5" :key="index" class="item">
+          <span>选项一</span>
+        </div>
       </div>
     </transition>
     <transition name="fade">
-      <div class="lin-action-sheet mask" v-show="show" @click="show = !show"></div>
+      <div class="lin-action-sheet mask" v-show="show" @click="show = false" @touchmove.prevent></div>
     </transition>
+    <!-- <div style="height: 500px;"></div> -->
   </div>
 </template>
 
 <script>
 import Vue from 'vue'
-import Button from 'vant/lib/button'
-import 'vant/lib/button/style'
-Vue.use(Button)
+import { Button, Picker, Popup, ActionSheet } from 'vant';
+// Vue.use(Button).use(Picker).use(Popup).use(ActionSheet)
 export default {
+  watch: {
+    show (val) {
+      if (val) {
+        document.body.classList.add('hidden')
+      } else {
+        document.body.classList.remove('hidden')
+      }
+    }
+  },
+  components: {
+    [Button.name]: Button,
+    [Picker.name]: Picker,
+    [Popup.name]: Popup,
+    [ActionSheet.name]: ActionSheet
+  },
   data () {
     return {
       show: false,
-      columns: ['杭州', '宁波', '温州', '嘉兴', '湖州']
+      showPicker: false,
+      columns: ['杭州', '宁波', '温州', '嘉兴', '湖州'],
+      actions: [
+        { name: '选项' },
+        { name: '选项' },
+        { name: '选项' },
+        { name: '选项' },
+        { name: '选项' },
+        { name: '选项' }
+      ]
     }
   }
 }
@@ -45,18 +77,34 @@ export default {
     position: fixed;
     left: 0;
     width: 100%;
+    /* max-height: 200px; */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     bottom: 0;
-    /* height: 250px; */
     background-color: #fff;
     z-index: 101;
     .item {
-      height: 100px;
-      background-color: #f00;
-      &:nth-child(2) {
-        background-color: #0f0;
+      position: relative;
+      text-align: center;
+      height: 50px;
+      font-size: 16px;
+      line-height: 50px;
+      background-color: #fff;
+      span {
+        color: #323233;
       }
-      &:nth-child(3) {
-        background-color: #00f;
+      &:active {
+        background-color: #f2f3f5;
+      }
+      &::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 1px;
+        background-color: #ebedf0;
+        transform: scaleY(0.5);
       }
     }
   }

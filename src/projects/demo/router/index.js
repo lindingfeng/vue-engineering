@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Index from '@@/pages/index'
-import Animation from '@@/pages/animation'
+// import Index from '@@/pages/index'
+// import Animation from '@@/pages/animation'
 
 Vue.use(Router)
 
@@ -11,12 +11,17 @@ export default new Router({
     {
       path: '/',
       name: 'index',
-      component: Index
+      component: () => import('@@/pages/index')
     },
     {
       path: '/animation',
       name: 'animation',
-      component: Animation
+      component: () => import('@@/pages/animation')
+    },
+    {
+      path: '/test',
+      name: 'test',
+      component: () => import('@@/pages/test')
     }
   ]
 })

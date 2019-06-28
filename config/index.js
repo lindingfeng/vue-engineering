@@ -24,16 +24,18 @@ if (!projectName) {
 
 process.env.projectName = projectName
 
-const entry = 'main.js';
+// const entry = 'main.js';
 const projectConfig = require(`../src/projects/${projectName}/project.config.js`);
 const publicPath = `/${projectName}/`;
-const template = projectConfig.useRem ? path.resolve(__dirname, `../src/projects/${projectName}/template/index.mobile.html`) : path.resolve(__dirname, `../src/projects/${projectName}/template/index.pc.html`);
+const template = projectConfig.useRem
+  ? path.resolve(__dirname, `../src/projects/${projectName}/template/index.mobile.html`)
+  : path.resolve(__dirname, `../src/projects/${projectName}/template/index.pc.html`);
 module.exports = {
   projectConfig,
   dev: {
     projectName,
     template,
-    entry: `./src/projects/${projectName}/${entry}`,
+    entry: `./src/projects/${projectName}/main.js`,
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: `/dist/${projectName}/`,
@@ -76,7 +78,7 @@ module.exports = {
      * Source Maps
      */
 
-    productionSourceMap: true,
+    productionSourceMap: false,
     // https://webpack.js.org/configuration/devtool/#production
     devtool: '#source-map',
 
