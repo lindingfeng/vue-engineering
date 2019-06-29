@@ -11,15 +11,62 @@
   "plugins": [
     "transform-vue-jsx",
     "transform-runtime",
+    // // 根据babel-plugin-component插件配置element-ui、mint-ui框架按需加载
+    [
+      "component",
+      [
+        {
+          "libraryName": "element-ui",
+          "styleLibraryName": "theme-chalk",
+          "style": true
+        },
+        {
+          "libraryName": "mint-ui",
+          "style": true
+        }
+      ]
+    ],
+    // 根据babel-plugin-transform-modules插件配置cube-ui框架按需加载
+    [
+      "transform-modules",
+      {
+        "cube-ui": {
+          "transform": "cube-ui/lib/${member}",
+          "kebabCase": true,
+          "style": {
+            "ignore": ["create-api", "better-scroll"]
+          }
+        }
+      }
+    ],
+    [
+      "component",
+      [
+        {
+          "libraryName": "element-ui",
+          "styleLibraryName": "theme-chalk",
+          "style": true
+        },
+        {
+          "libraryName": "mint-ui",
+          "style": true
+        }
+      ]
+    ],
     // 根据babel-plugin-import插件配置vant框架按需加载
     [
       "import",
-      {
-        "libraryName": "vant",
-        "libraryDirectory": "es",
-        "style": true
-      },
-      "vant"
+      [
+        {
+          "libraryName": "vant",
+          "libraryDirectory": "es",
+          "style": true
+        },
+        {
+          "libraryName": "iview",
+          "libraryDirectory": "src/components"
+        }
+      ]
     ]
   ]
 }

@@ -1,7 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-// import Index from '@@/pages/index'
-// import Animation from '@@/pages/animation'
 
 Vue.use(Router)
 

@@ -19,6 +19,9 @@ export default {
 .hidden {
   overflow: hidden !important;
 }
+body {
+  font-size: 14px;
+}
 body, p, ul {
   padding: 0;
   margin: 0;

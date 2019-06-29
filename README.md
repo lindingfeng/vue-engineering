@@ -54,3 +54,119 @@ npm run build demo
 # 生产环境构建项目并生成报告
 npm run build demo --report
 ```
+
+## 集成UI框架(已添加按需加载插件)
+
+``` bash
+# element-ui
+--- main.js ---
+// 引入element-ui的样式
+import 'element-ui/lib/theme-chalk/index.css'
+
+--- xxx.vue ---
+<template>
+  <div class="index-page">
+    <!-- 使用Button组件 -->
+    <el-button type="success">成功按钮</el-button>
+  </div>
+</template>
+<script>
+// 引入element-ui的Button组件
+import { Button } from 'element-ui';
+export default {
+  // 局部注册组件
+  components: {
+    [Button.name]: Button
+  }
+}
+</script>
+
+# iview
+--- main.js ---
+// 引入iview的样式
+import 'iview/dist/styles/iview.css'
+
+--- xxx.vue ---
+<template>
+  <div class="index-page">
+    <!-- 使用Button组件 -->
+    <Button type="primary">主要按钮</Button>
+  </div>
+</template>
+<script>
+// 引入iview的Button组件
+import { Button } from 'element-ui'
+export default {
+  // 局部注册组件
+  components: {
+    [Button.name]: Button
+  }
+}
+</script>
+
+# mint-ui
+--- xxx.vue ---
+<template>
+  <div class="index-page">
+    <!-- 使用Button组件 -->
+    <mt-button type="primary">主要按钮</mt-button>
+  </div>
+</template>
+<script>
+// 引入mint-ui的Button组件
+import { Button } from 'mint-ui'
+export default {
+  // 局部注册组件
+  components: {
+    [Button.name]: Button
+  }
+}
+</script>
+
+# vant
+--- xxx.vue ---
+<template>
+  <div class="index-page">
+    <!-- 使用Button组件 -->
+    <van-button type="primary">主要按钮</van-button>
+  </div>
+</template>
+<script>
+// 引入vant的Button组件
+import { Button } from 'vant';
+export default {
+  // 局部注册组件
+  components: {
+    [Button.name]: Button
+  }
+}
+</script>
+
+# cube-ui
+// 引入cube-ui的样式
+import { Style } from 'cube-ui'
+
+--- xxx.vue ---
+<template>
+  <div class="index-page">
+    <!-- 使用Button组件 -->
+    <cube-button type="primary">主要按钮</cube-button>
+  </div>
+</template>
+<script>
+// 引入cube-ui的Button组件
+import { Button } from 'cube-ui';
+export default {
+  // 局部注册组件
+  components: {
+    [Button.name]: Button
+  }
+}
+</script>
+```
+
+## 常用插件
+
+``` bash
+......
+```
