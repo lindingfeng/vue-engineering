@@ -152,6 +152,7 @@ export default {
 
 ### [cube-ui](https://didi.github.io/cube-ui/#/zh-CN)  
 ```JavaScript
+--- main.js ---
 // 引入cube-ui的样式
 import { Style } from 'cube-ui'
 
