@@ -166,10 +166,10 @@ export default {
 ```
 
 ## 常用插件
-vue-awesome-swiper：vue下基于swiper4的轮播组件  
+### vue-awesome-swiper：vue下基于swiper4的轮播组件  
   [Docs(文档)](https://www.swiper.com.cn/api/index.html)  
   Tip：build体积大约为137kb左右，体积较大，对swiper要求不高的话不推荐使用哦!
 
-vue-amap：vue下高德地图组件  
+### vue-amap：vue下高德地图组件  
   [Docs(文档)](https://elemefe.github.io/vue-amap/#/zh-cn/base/amap)  
   Tip：build体积大约为58kb左右，需在https协议下使用哦!
