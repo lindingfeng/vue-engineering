@@ -56,15 +56,15 @@ npm run build demo
 npm run build demo --report
 ```
 
-## 集成UI框架(已添加按需加载插件)
+## 集成UI框架(已添加按需加载)
 
-``` bash
-# element-ui
+### [element-ui](https://element.eleme.cn/#/zh-CN/component/installation) 
+```JavaScript
 --- main.js ---
 // 引入element-ui的样式
 import 'element-ui/lib/theme-chalk/index.css'
 
---- xxx.vue ---
+--- xxx.vue ---  
 <template>
   <div class="index-page">
     <!-- 使用Button组件 -->
@@ -81,8 +81,10 @@ export default {
   }
 }
 </script>
+```
 
-# iview
+### [iview](https://www.iviewui.com/) 
+```JavaScript
 --- main.js ---
 // 引入iview的样式
 import 'iview/dist/styles/iview.css'
@@ -104,8 +106,10 @@ export default {
   }
 }
 </script>
+```
 
-# mint-ui
+### [mint-ui](https://mint-ui.github.io/#!/zh-cn) 
+```JavaScript
 --- xxx.vue ---
 <template>
   <div class="index-page">
@@ -123,8 +127,10 @@ export default {
   }
 }
 </script>
+```
 
-# vant
+### [vant](https://youzan.github.io/vant/#/zh-CN/intro)  
+```JavaScript
 --- xxx.vue ---
 <template>
   <div class="index-page">
@@ -142,8 +148,10 @@ export default {
   }
 }
 </script>
+```
 
-# cube-ui
+### [cube-ui](https://didi.github.io/cube-ui/#/zh-CN)  
+```JavaScript
 // 引入cube-ui的样式
 import { Style } from 'cube-ui'
 
