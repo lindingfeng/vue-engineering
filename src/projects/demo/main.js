@@ -14,7 +14,18 @@ import demoApi from './apis/demoApi'
 // new VConsole()
 
 // 模拟接口数据(mock)
-import './mock'
+// import './mock'
+
+// 国际化语言
+// import VueI18n from 'vue-i18n'
+// Vue.use(VueI18n)
+// const i18n = new VueI18n({
+//   locale: 'en',
+//   messages: {
+//     zh: require('./locales/zh-CN'),
+//     en: require('./locales/en-CN')
+//   }
+// })
 
 Vue.prototype.$demoApi = demoApi
 
@@ -24,6 +35,7 @@ Vue.config.productionTip = false
 new Vue({
   el: '#app',
   router,
+  i18n,
   components: { App },
   template: '<App/>'
 })
