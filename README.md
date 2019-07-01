@@ -95,7 +95,7 @@ import 'iview/dist/styles/iview.css'
 </template>
 <script>
 // 引入iview的Button组件
-import { Button } from 'element-ui'
+import { Button } from 'iview'
 export default {
   // 局部注册组件
   components: {

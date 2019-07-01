@@ -1,0 +1,29 @@
+@import 'normalize.css';
+
+* {
+  box-sizing: border-box;
+}
+
+body{
+  font-size: 14px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body, h1, h2, h3, h4, h5, h6, p, ul, ol, form {
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  list-style: none;
+}
+
+img {
+  border: 0;
+  vertical-align: top;
+}
+
+a {
+  color: #000;
+  text-decoration: none;
+}
