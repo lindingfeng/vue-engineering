@@ -1,9 +1,6 @@
 <template>
   <div class="index-page">
     <van-button type="primary">主要按钮</van-button>
-    <!-- <van-button type="primary" @click="$i18n.locale = 'zh'">切换中文</van-button>
-    <van-button type="primary" @click="$i18n.locale = 'en'">切换英文</van-button>
-    <p>{{$t('message.hello')}}</p> -->
     <!-- <Swiper /> -->
     <!-- <Amap /> -->
     <!-- <Clipboard /> -->
