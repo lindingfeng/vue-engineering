@@ -1,9 +1,9 @@
 import Mock from 'mockjs'
 
 /*
-  *@Description: 订单列表
-  *@Author: lindingfeng
-  *@Date: 2019-07-01 15:27:15
+ *@Description: 订单列表
+ *@Author: lindingfeng
+ *@Date: 2019-07-01 15:27:15
 */
 const getOrderList = () => {
   let data = []
@@ -17,9 +17,9 @@ const getOrderList = () => {
 }
 
 /*
-  *@Description: 订单详情
-  *@Author: lindingfeng
-  *@Date: 2019-07-01 15:27:15
+ *@Description: 订单详情
+ *@Author: lindingfeng
+ *@Date: 2019-07-01 15:27:15
 */
 const getOrderDetails = () => {
   let data = []

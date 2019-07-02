@@ -11,9 +11,8 @@ export default {
 </script>
 
 <!--
-  默认使用postcss，如需使用sass或less，安装对应的loader即可。
-  sass：yarn add sass-loader node-sass -D
-  less：yarn add less-loader -D
+  内置3种css解析器，默认使用postcss。
+  lang="postcss"、lang="scss"、lang="less"
 -->
 <style lang="postcss">
 @import '../../global/css/base.css';

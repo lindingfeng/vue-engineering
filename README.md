@@ -43,6 +43,7 @@
 ## 使用模板
 
 ```
+npm install -g @vue/cli-init
 vue init lindingfeng/engineering#vue projectName
 
 or
