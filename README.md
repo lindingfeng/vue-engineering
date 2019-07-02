@@ -40,7 +40,17 @@
 └─static  通用静态文件目录
 ```
 
-## Build Setup
+## 使用模板
+
+```
+vue init lindingfeng/engineering#vue projectName
+
+or
+
+git clone https://github.com/lindingfeng/vue-engineering.git
+```
+
+## 开发
 
 ``` bash
 # 安装项目依赖
