@@ -47,7 +47,6 @@ export default {
     return {
       show: false,
       showPicker: false,
-      columns: ['杭州', '宁波', '温州', '嘉兴', '湖州'],
       actions: [
         { name: '选项' },
         { name: '选项' },
