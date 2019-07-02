@@ -10,7 +10,7 @@ const service = axios.create({
 service.interceptors.request.use(
   config => {
     // if (store.getters.token) {
-    //   config.headers['X-Token'] = getToken()
+    //   config.headers['X-Token'] = 'uyguyvuyvuvutvutfcyrcutvf'
     // }
     return config
   },
@@ -20,7 +20,7 @@ service.interceptors.request.use(
   }
 )
 
-// response 拦截器
+// response拦截器
 service.interceptors.response.use(
   response => {
     return response;

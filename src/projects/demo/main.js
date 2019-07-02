@@ -3,7 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import demoApi from './apis/demoApi'
+// import demoApi from './apis/demoApi'
 
 // 解决移动端click延迟300ms
 // import FastClick from 'fastclick'
@@ -27,7 +27,7 @@ import demoApi from './apis/demoApi'
 //   }
 // })
 
-Vue.prototype.$demoApi = demoApi
+// Vue.prototype.$demoApi = demoApi
 
 Vue.config.productionTip = false
 
@@ -35,7 +35,7 @@ Vue.config.productionTip = false
 new Vue({
   el: '#app',
   router,
-  i18n,
+  // i18n,
   components: { App },
   template: '<App/>'
 })

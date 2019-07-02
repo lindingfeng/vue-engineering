@@ -13,7 +13,6 @@
 </template>
 
 <script>
-import Vue from 'vue'
 import { Button } from 'vant';
 // import Swiper from '@@/components/Swiper'
 // import Amap from '@@/components/Amap'

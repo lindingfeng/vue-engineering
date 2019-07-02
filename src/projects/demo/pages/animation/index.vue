@@ -26,7 +26,7 @@
 <script>
 import Vue from 'vue'
 import { Button, Picker, Popup, ActionSheet } from 'vant';
-// Vue.use(Button).use(Picker).use(Popup).use(ActionSheet)
+
 export default {
   watch: {
     show (val) {

@@ -26,7 +26,7 @@
 <script>
 import Vue from 'vue'
 import { Button, Picker } from 'vant'
-// Vue.use(Button).use(Picker)
+
 export default {
   components: {
     [Button.name]: Button,
