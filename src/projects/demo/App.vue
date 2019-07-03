@@ -11,8 +11,9 @@ export default {
 </script>
 
 <!--
-  内置3种css解析器，默认使用postcss。
-  lang="postcss"、lang="scss"、lang="less"
+  内置4种css解析器，默认使用postcss。
+  lang="postcss"、lang="scss"
+  lang="less"、lang="stylus"
 -->
 <style lang="postcss">
 @import '../../global/css/base.css';

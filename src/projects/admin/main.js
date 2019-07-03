@@ -3,21 +3,25 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import adminApi from './apis/adminApi'
-import 'iview/dist/styles/iview.css'
+// import adminApi from './apis/adminApi'
 
-// 解决移动端click延迟300ms
-// import FastClick from 'fastclick'
-// FastClick.attach(document.body)
-
-// 移动端调试工具
-// import VConsole from 'vconsole/dist/vconsole.min.js'
-// new VConsole()
+import 'element-ui/lib/theme-chalk/index.css'
 
 // 模拟接口数据(mock)
-import './mock'
+// import './mock'
 
-Vue.prototype.$adminApi = adminApi
+// 国际化语言
+// import VueI18n from 'vue-i18n'
+// Vue.use(VueI18n)
+// const i18n = new VueI18n({
+//   locale: 'en',
+//   messages: {
+//     zh: require('./locales/zh-CN'),
+//     en: require('./locales/en-CN')
+//   }
+// })
+
+// Vue.prototype.$adminApi = adminApi
 
 Vue.config.productionTip = false
 
