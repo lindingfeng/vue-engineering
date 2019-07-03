@@ -2,17 +2,20 @@
   <div class="index-page">
       <el-button type="success">成功按钮</el-button>
       <!-- <echart /> -->
+      <!-- <mavonEditor /> -->
   </div>
 </template>
 
 <script>
 import { Button } from 'element-ui'
 // import echart from '@@/components/echart'
+// import mavonEditor from '@@/components/mavonEditor'
 
 export default {
   components: {
     [Button.name]: Button,
-    // echart
+    // echart,
+    // mavonEditor
   },
   data () {
     return {
