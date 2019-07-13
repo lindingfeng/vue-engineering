@@ -12,7 +12,9 @@
 │     ├─static
 │     │  └─demo
 │     │     ├─js
-│     │     └─css
+│     │     ├─css
+│     │     ├─fonts
+│     │     └─img
 │     └─index.html
 ├─src  开发目录
 │  ├─apis  通用接口目录
@@ -24,18 +26,18 @@
 │  │  └─js
 │  ├─projects  项目总目录
 │  │  └─demo  项目目录
-│  │      ├─apis  项目接口目录
-│  │      ├─assets  项目静态文件目录
-│  │      ├─components  项目组件目录
-│  │      ├─locales  国际化目录
-│  │      ├─mock  mock目录
-│  │      ├─router  路由目录
-│  │      ├─store  Vuex目录
-│  │      ├─pages(views)  项目页面目录
-│  │      │  └─index  index页面目录
-│  │      │     └─index.vue
-│  │      ├─template  模板目录
-│  │      └─utils  项目工具目录
+│  │     ├─apis  项目接口目录
+│  │     ├─assets  项目静态文件目录
+│  │     ├─components  项目组件目录
+│  │     ├─locales  国际化目录
+│  │     ├─mock  mock目录
+│  │     ├─router  路由目录
+│  │     ├─store  Vuex目录
+│  │     ├─pages  项目页面目录
+│  │     │  └─index  index页面目录
+│  │     │     └─index.vue
+│  │     ├─template  模板目录
+│  │     └─utils  项目工具目录
 │  └─utils  通用工具目录
 └─static  通用静态文件目录
 ```

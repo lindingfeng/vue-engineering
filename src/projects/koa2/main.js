@@ -3,15 +3,15 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import demoApi from './apis/demoApi'
+import koa2Api from './apis/koa2Api'
 
 // 解决移动端click延迟300ms
 // import FastClick from 'fastclick'
 // FastClick.attach(document.body)
 
 // 移动端调试工具
-// import VConsole from 'vconsole/dist/vconsole.min.js'
-// new VConsole()
+import VConsole from 'vconsole/dist/vconsole.min.js'
+new VConsole()
 
 // 模拟接口数据(mock)
 // import './mock'
@@ -27,7 +27,7 @@ import demoApi from './apis/demoApi'
 //   }
 // })
 
-Vue.prototype.$demoApi = demoApi
+Vue.prototype.$koa2Api = koa2Api
 
 Vue.config.productionTip = false
 

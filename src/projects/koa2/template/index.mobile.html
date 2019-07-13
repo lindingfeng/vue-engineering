@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <title>Koa</title>
+    <script type="text/javascript">
+      (function (win, undefined) {
+        var doc = win.document
+        var docEl = doc.documentElement
+        var dpr = win.devicePixelRatio || 1
+        var evtName = 'resize'
+        var resizeEvt = function () {
+          // 以 iPhone6 为设置标准
+          var docWidth = docEl.getBoundingClientRect().width || 375;
+          // 当屏幕尺寸为 375 * 667时 根节点 font-size 为 75px
+          docEl.style.fontSize = Math.min((docWidth / 10) * 2, 100) + 'px';
+        };
+        if (win.addEventListener) {
+          win.addEventListener(evtName, resizeEvt, false);
+        }
+        docEl.setAttribute('data-dpr', dpr);
+        var ua = window.navigator.userAgent;
+        // 苹果系统
+        if (/iPhone/.test(ua)) {
+            docEl.setAttribute('data-iphone', true);
+        }
+        // 安卓系统
+        if (/Android/.test(ua)) {
+            docEl.setAttribute('data-android', true);
+        }
+        // 微信环境
+        if (/MicroMessenger/i.exec(navigator.userAgent) !== null) {
+            docEl.setAttribute('data-wechat', true);
+        }
+        resizeEvt();
+      })(window);
+    </script>
+    <!-- <script src="https://cdn.bootcss.com/vue/2.5.2/vue.min.js"></script>
+    <script src="https://cdn.bootcss.com/vue-router/3.0.1/vue-router.min.js"></script> -->
+  </head>
+  <body>
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
+  </body>
+</html>

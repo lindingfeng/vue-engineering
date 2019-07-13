@@ -1,6 +1,6 @@
 <template>
   <div class="index-page">
-    <van-button type="primary">主要按钮</van-button>
+    <van-button type="primary" style="width: 100%;" @click="$router.push('animation')">前往animation页面</van-button>
     <!-- <Swiper /> -->
     <!-- <Amap /> -->
     <!-- <Clipboard /> -->
@@ -10,7 +10,10 @@
 </template>
 
 <script>
-import { Button } from 'vant';
+import {
+  Button
+} from 'vant';
+import axios from 'axios'
 // import Swiper from '@@/components/Swiper'
 // import Amap from '@@/components/Amap'
 // import Clipboard from '@@/components/Clipboard'
@@ -31,21 +34,14 @@ export default {
     }
   },
   methods: {
-    showSome () {
-    }
-  },
-  mounted () {
-    // this.$demoApi.getOrderList().then((ret) => {
-    //   console.log(ret)
-    // })
   }
 }
 </script>
 
 <style lang="postcss" scoped>
-.content {
-  .font {
-    font-size: 16px;
-  }
-}
+/* .index-page {
+  height: 100vh;
+  padding: 0 20px;
+  background-color: #f8f8f8;
+} */
 </style>
