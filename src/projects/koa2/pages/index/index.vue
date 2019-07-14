@@ -16,8 +16,16 @@
           <van-cell title="修改密码" is-link to="forget" />
         </van-collapse-item>
 
+        <!-- 商品 -->
+        <van-collapse-item title="商品" name="2">
+          <van-icon slot="right-icon" name="passed" class="top-icon" />
+          <van-cell title="添加商品" is-link to="addShop" />
+          <van-cell title="商品列表" is-link to="shopList" />
+          <!-- <van-cell title="商品详情" is-link :to="{path: 'shopDeatil', query: {name: 'lindf', age: 25}}" /> -->
+        </van-collapse-item>
+
         <!-- 订单 -->
-        <van-collapse-item title="订单" name="2">
+        <van-collapse-item title="订单" name="3">
           <van-icon slot="right-icon" name="passed" class="top-icon" />
           <van-cell title="创建订单" is-link to="index" />
           <van-cell title="订单列表" is-link to="orderList" />
@@ -25,7 +33,7 @@
         </van-collapse-item>
 
         <!-- 文章 -->
-        <van-collapse-item title="文章" name="3">
+        <van-collapse-item title="文章" name="4">
           <van-icon slot="right-icon" name="passed" class="top-icon" />
           <van-cell title="创建文章" is-link to="index" />
           <van-cell title="文章列表" is-link to="index" />

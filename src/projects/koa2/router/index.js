@@ -28,6 +28,21 @@ export default new Router({
       component: () => import('@@/pages/forget')
     },
     {
+      path: '/addShop',
+      name: 'addShop',
+      component: () => import('@@/pages/addShop')
+    },
+    {
+      path: '/shopList',
+      name: 'shopList',
+      component: () => import('@@/pages/shopList')
+    },
+    {
+      path: '/shopDetail',
+      name: 'shopDetail',
+      component: () => import('@@/pages/shopDetail')
+    },
+    {
       path: '/orderList',
       name: 'orderList',
       component: () => import('@@/pages/orderList')
