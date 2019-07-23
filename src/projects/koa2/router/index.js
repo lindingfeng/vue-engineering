@@ -33,6 +33,11 @@ export default new Router({
       component: () => import('@@/pages/addShop')
     },
     {
+      path: '/addCategory',
+      name: 'addCategory',
+      component: () => import('@@/pages/addCategory')
+    },
+    {
       path: '/shopList',
       name: 'shopList',
       component: () => import('@@/pages/shopList')
@@ -51,6 +56,11 @@ export default new Router({
       path: '/uploader',
       name: 'uploader',
       component: () => import('@@/pages/uploader')
+    },
+    {
+      path: '/addAddress',
+      name: 'addAddress',
+      component: () => import('@@/pages/addAddress')
     }
   ]
 })

@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import store from './store'
 import koa2Api from './apis/koa2Api'
 
 // 解决移动端click延迟300ms
@@ -35,6 +36,7 @@ Vue.config.productionTip = false
 new Vue({
   el: '#app',
   router,
+  store,
   // i18n,
   components: { App },
   template: '<App/>'

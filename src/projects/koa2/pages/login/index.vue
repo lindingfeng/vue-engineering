@@ -46,6 +46,7 @@ import {
   Field,
   Toast
 } from 'vant';
+import Cookies from 'js-cookie'
 
 export default {
   components: {
@@ -83,6 +84,11 @@ export default {
 
         if (+ret.data._errCode === 0) {
           Toast.success('登录成功!')
+          Cookies.set('token', ret.data._data.token)
+          Cookies.set('avatar', ret.data._data.avatar)
+          this.$store.commit('setLoginState', true)
+          this.$store.commit('setAvatar', ret.data._data.avatar)
+          this.$router.replace('/')
         } else {
           Toast.fail(ret.data._errStr)
         }

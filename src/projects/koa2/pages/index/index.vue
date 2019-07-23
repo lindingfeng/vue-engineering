@@ -2,7 +2,23 @@
   <div class="index-page">
 
     <!-- 一级标题 -->
-    <h3 class="top-title">Koa2</h3>
+    <h3 class="top-title">
+      <img src="./imgs/vue.png" alt="">
+      <span>Koa2</span>
+    </h3>
+    <p class="top-desc">基于vue + node开发的全栈实践!</p>
+
+    <!-- 登陆状态 -->
+    <div class="account">
+      <div v-if="!isValidloginState" class="login-registered">
+        <p @click="$router.push('login')">登陆</p>
+        <div class="line"></div>
+        <p @click="$router.push('registered')">注册</p>
+      </div>
+      <div v-else class="icon-content">
+        <img :src="avatar" alt="">
+      </div>
+    </div>
 
     <!-- 功能面板 -->
     <div class="collapse-content">
@@ -19,8 +35,9 @@
         <!-- 商品 -->
         <van-collapse-item title="商品" name="2">
           <van-icon slot="right-icon" name="passed" class="top-icon" />
-          <van-cell title="添加商品" is-link to="addShop" />
           <van-cell title="商品列表" is-link to="shopList" />
+          <van-cell title="添加商品" is-link to="addShop" />
+          <van-cell title="添加分类" is-link to="addCategory" />
           <!-- <van-cell title="商品详情" is-link :to="{path: 'shopDeatil', query: {name: 'lindf', age: 25}}" /> -->
         </van-collapse-item>
 
@@ -41,294 +58,53 @@
         </van-collapse-item>
 
         <!-- 上传 -->
-        <van-collapse-item title="上传" name="4">
+        <van-collapse-item title="上传" name="5">
           <van-icon slot="right-icon" name="passed" class="top-icon" />
           <van-cell title="上传图片" is-link to="uploader" />
         </van-collapse-item>
 
+        <!-- 地址 -->
+        <van-collapse-item title="地址" name="6">
+          <van-icon slot="right-icon" name="passed" class="top-icon" />
+          <van-cell title="我的地址" is-link to="index" />
+          <van-cell title="添加地址" is-link to="addAddress" />
+        </van-collapse-item>
+
       </van-collapse>
     </div>
-
-    <!-- <van-cell-group>
-      <van-field v-model="orderName" placeholder="请输入商品名" />
-    </van-cell-group>
-    <van-button type="primary" style="width: 100%;" @click="buildOrder">生成订单</van-button>
-    <van-cell-group>
-      <van-field v-model="phone" placeholder="请输入手机号码" />
-    </van-cell-group>
-    <van-cell-group>
-      <van-field v-model="password" placeholder="请输入密码" />
-    </van-cell-group>
-    <van-button type="primary" style="width: 100%;" @click="login">登录</van-button>
-    <van-button type="warning" style="width: 100%;" @click="registered">注册</van-button>
-    <van-collapse v-model="activeNames">
-      <van-collapse-item title="MongoDB的数据" name="1">
-        <van-button
-          type="primary">
-          上一页
-        </van-button>
-        <van-button
-          type="info"
-          @click="getFormMongoDB">
-          请求MongoDB数据
-        </van-button>
-        <van-button
-          type="primary">
-          下一页
-        </van-button>
-        <div v-if="mongoDBData._data" style="margin-top: 15px;word-wrap: break-word;">{{mongoDB}}</div>
-      </van-collapse-item>
-      <van-collapse-item title="MySQL的数据" name="2">
-        <van-button
-          type="primary"
-          @click="getFormMySQL('prev')">
-          上一页
-        </van-button>
-        <van-button
-          type="info"
-          @click="getFormMySQL('index')">
-          请求MySQL数据
-        </van-button>
-        <van-button
-          type="primary"
-          @click="getFormMySQL('next')">
-          下一页
-        </van-button>
-        <div v-if="mySQLData._data" style="margin-top: 15px;word-wrap: break-word;">{{mySQL}}</div>
-      </van-collapse-item>
-    </van-collapse> -->
-    <!-- <Swiper /> -->
-    <!-- <Amap /> -->
-    <!-- <Clipboard /> -->
-    <!-- <QRCode /> -->
-    <!-- <Sign /> -->
   </div>
 </template>
 
 <script>
 import {
   Button,
-  Field,
   Icon,
   Collapse,
   CollapseItem,
   Cell,
   CellGroup,
-  Toast,
-  Uploader
 } from 'vant';
-import axios from 'axios'
 
 export default {
   components: {
     [Button.name]: Button,
-    [Field.name]: Field,
     [Icon.name]: Icon,
     [Collapse.name]: Collapse,
     [CollapseItem.name]: CollapseItem,
     [CellGroup.name]: CellGroup,
-    [Cell.name]: Cell,
-    [Toast.name]: Toast,
-    [Uploader.name]: Uploader,
+    [Cell.name]: Cell
   },
   data () {
     return {
-      mongoDBData: {},
-      mongoDBLoading: false,
-      mySQLData: {},
-      mySQLoading: false,
-      activeNames: ['1', '2'],
-      activeCollapse: [],
-      orderName: '',
-      phone: '',
-      password: '',
-      pageIndex: 1,
-      pageSize: 5
+      activeCollapse: []
     }
   },
   computed: {
-    mongoDB () {
-      return JSON.stringify(this.mongoDBData)
+    isValidloginState () {
+      return this.$store.state.isValidloginState
     },
-    mySQL () {
-      return JSON.stringify(this.mySQLData)
-    }
-  },
-  methods: {
-    getFormMongoDB () {
-      const port = '3000'
-      setTimeout(() => {
-        this.getData(port)
-      }, 1000)
-    },
-    getFormMySQL (type) {
-      const port = '3001'
-
-      if (type === 'prev') {
-        this.pageIndex--
-      } else if (type === 'next') {
-        this.pageIndex++
-      } else {
-        this.pageIndex = 1
-      }
-
-      this.getData(port)
-    },
-    buildOrder () {
-      if (!this.orderName) {
-        Toast.fail('请输入商品名!')
-        return
-      }
-      this.setData(3001)
-    },
-    getData (port) {
-      const _this = this
-      axios({
-        method: 'post',
-        url: `http://localhost:${port || 3000}/api/getOrderList`,
-        params: {
-          firstName: 'linss',
-          lastName: 'dingfeng'
-        },
-        data: {
-          pageIndex: this.pageIndex,
-          pageSize: this.pageSize
-        }
-      })
-      .then(function (res) {
-        if (+port === 3000) {
-          _this.mongoDBData = res.data
-          return
-        }
-        _this.mySQLData = res.data
-      });
-    },
-    setData (port) {
-      const _this = this
-      axios({
-        method: 'post',
-        url: `http://localhost:${port || 3000}/api/addOrder`,
-        data: {
-          order_name: _this.orderName
-        }
-      })
-      .then(function (res) {
-        if (+res.data._errCode === 0) {
-          Toast.success('添加成功!')
-        }
-      })
-    },
-    login () {
-      const port = 3001
-      const _this = this
-
-      if (!_this.phone || !_this.password) {
-        Toast.fail('手机号或密码不能为空!')
-        return
-      }
-
-      if (!/^1\d{10}$/.test(_this.phone)) {
-        Toast.fail('请输入正确的手机号!')
-        return
-      }
-
-      axios({
-        method: 'post',
-        url: `http://localhost:${port || 3000}/api/login`,
-        data: {
-          phone: _this.phone,
-          password: _this.password
-        }
-      })
-      .then(function (res) {
-        if (+res.data._errCode === 0) {
-          Toast.success('登录成功!')
-        } else {
-          Toast.fail(res.data._errStr)
-        }
-      })
-    },
-    registered () {
-      const port = 3001
-      const _this = this
-
-      if (!_this.phone || !_this.password) {
-       Toast.fail('手机号或密码不能为空!')
-        return
-      }
-
-      if (!/^1\d{10}$/.test(_this.phone)) {
-        Toast.fail('请输入正确的手机号!')
-        return
-      }
-      
-      axios({
-        method: 'post',
-        url: `http://localhost:${port || 3000}/api/registered`,
-        data: {
-          phone: _this.phone,
-          password: _this.password
-        }
-      })
-      .then(function (res) {
-        if (+res.data._errCode === 0) {
-          Toast.success('注册成功!')
-        } else {
-          Toast.fail(res.data._errStr)
-        }
-      })
-    },
-    getToken () {
-      const _this = this
-      axios({
-        method: 'post',
-        url: `http://localhost:3001/api/getToken`
-      })
-      .then(function (res) {
-        if (+res.data._errCode === 0) {
-          Cookies.set('token', res.data._data.token || '')
-        }
-      })
-    },
-    verifyToken () {
-      const _this = this
-      axios({
-        method: 'post',
-        url: `http://localhost:3001/api/verifyToken`,
-        data: {
-          token: Cookies.get('token')
-        }
-      })
-      .then(function (res) {
-        if (+res.data._errCode === 0) {
-          
-        }
-      })
-    },
-    afterRead(file) {
-      // 此时可以自行将文件上传至服务器
-      console.log(file);
-      const _this = this
-      let formdata = new FormData()
-      formdata.append('file',file.file)
-      axios.post(`http://localhost:3001/api/uploadfile`, formdata, {'Content-Type': 'multipart/form-data'})
-      .then(function (res) {
-        if (+res.data._errCode === 0) {
-          
-        }
-      })
-    },
-    getImg () {
-      let file = document.getElementById("upload_file").files[0]
-      let formdata = new FormData()
-      formdata.append('file',file)
-      console.log(file)
-      axios.post(`http://localhost:3001/api/uploadfile`, formdata, {'Content-Type': 'multipart/form-data'})
-      .then(function (res) {
-        if (+res.data._errCode === 0) {
-          
-        }
-      })
+    avatar () {
+      return this.$store.state.avatar
     }
   }
 }
@@ -337,13 +113,12 @@ export default {
 <style lang="postcss" scoped>
 .index-page {
   height: 100vh;
-  padding: 0 20px;
+  padding: 64px 20px 0;
   background-color: #f8f8f8;
-  .top-title {
-    padding: 50px 0;
-    text-align: center;
-    font-size: 36px;
-    font-weight: 500;
+  .top-desc {
+    margin-bottom: 40px;
+    font-size: 14px;
+    color: #7d7e80;
   }
   /deep/ .van-collapse-item {
     margin-bottom: 16px;
@@ -359,9 +134,54 @@ export default {
     padding: 0;
   }
 }
+.top-title {
+  margin-bottom: 15px;
+  img, span {
+    display: inline-block;
+    vertical-align: middle;
+  }
+  img {
+    width: 36px;
+    height: 36px;
+  }
+  span {
+    margin-left: 8px;
+    font-size: 36px;
+    font-weight: 500;
+  }
+}
 .collapse-content {
   /deep/ .top-icon {
     font-size: 22px;
+  }
+}
+.account {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+}
+.icon-content {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+  img {
+    width: 50px;
+    height: 50px;
+  }
+}
+.login-registered {
+  display: flex;
+  align-items: center;
+  p {
+    font-size: 14px;
+    color: #666666;
+  }
+  .line {
+    width: 1px;
+    margin: 0 8px;
+    height: 10px;
+    background-color: #666666;
   }
 }
 </style>
