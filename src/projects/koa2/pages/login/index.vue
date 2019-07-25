@@ -88,6 +88,10 @@ export default {
           Cookies.set('avatar', ret.data._data.avatar)
           this.$store.commit('setLoginState', true)
           this.$store.commit('setAvatar', ret.data._data.avatar)
+          if (this.$route.query.back) {
+            this.$router.go(-1)
+            return
+          }
           this.$router.replace('/')
         } else {
           Toast.fail(ret.data._errStr)
@@ -102,9 +106,6 @@ export default {
 </script>
 
 <style lang="postcss" scoped>
-.login-page {
-
-}
 .logo-icon {
   padding: 60px 0;
   text-align: center;

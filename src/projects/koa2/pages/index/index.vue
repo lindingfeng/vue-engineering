@@ -66,7 +66,7 @@
         <!-- 地址 -->
         <van-collapse-item title="地址" name="6">
           <van-icon slot="right-icon" name="passed" class="top-icon" />
-          <van-cell title="我的地址" is-link to="index" />
+          <van-cell title="我的地址" is-link to="myAddress" />
           <van-cell title="添加地址" is-link to="addAddress" />
         </van-collapse-item>
 

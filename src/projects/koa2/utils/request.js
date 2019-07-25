@@ -1,4 +1,6 @@
 import axios from 'axios'
+import Cookies from 'js-cookie'
+import store from '../router'
 
 // 创建axios实例
 const service = axios.create({
@@ -9,9 +11,7 @@ const service = axios.create({
 // request拦截器
 service.interceptors.request.use(
   config => {
-    // if (store.getters.token) {
-    //   config.headers['X-Token'] = 'uyguyvuyvuvutvutfcyrcutvf'
-    // }
+    config.data.token = Cookies.get('token')
     return config
   },
   error => {
@@ -23,6 +23,10 @@ service.interceptors.request.use(
 // response拦截器
 service.interceptors.response.use(
   response => {
+    // 登录态失效
+    if (+response.data._errCode === 1010) {
+      store.push(`/login?back=${true}`)
+    }
     return response;
   },
   error => {

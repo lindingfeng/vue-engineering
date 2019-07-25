@@ -1,11 +1,11 @@
 import request from '@@/utils/request'
 
 export default {
-  checkLoginState (data) {
+  checkLoginState () {
     return request({
       url: '/api/checkLoginState',
       method: 'post',
-      data: data
+      data: {}
     })
   },
   login (data) {
@@ -69,7 +69,29 @@ export default {
   getAllAddress () {
     return request({
       url: '/json/area.json',
-      method: 'get'
+      method: 'get',
+      data: {}
+    })
+  },
+  addAddress (data) {
+    return request({
+      url: '/api/addAddress',
+      method: 'post',
+      data: data
+    })
+  },
+  getAddress () {
+    return request({
+      url: '/api/getAddress',
+      method: 'post',
+      data: {}
+    })
+  },
+  getAddressInfo (data) {
+    return request({
+      url: '/api/getAddressInfo',
+      method: 'post',
+      data: data
     })
   }
 }

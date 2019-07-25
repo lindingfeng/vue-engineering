@@ -61,6 +61,11 @@ export default new Router({
       path: '/addAddress',
       name: 'addAddress',
       component: () => import('@@/pages/addAddress')
+    },
+    {
+      path: '/myAddress',
+      name: 'myAddress',
+      component: () => import('@@/pages/myAddress')
     }
   ]
 })

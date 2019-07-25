@@ -29,7 +29,7 @@ const store = new Vuex.Store({
         return
       }
       try {
-        let ret = await koa2Api.checkLoginState({ token })
+        let ret = await koa2Api.checkLoginState()
         if (+ret.data._errCode === 0) {
           if (+ret.data._data.status === 1) {
             commit('setLoginState', true)
