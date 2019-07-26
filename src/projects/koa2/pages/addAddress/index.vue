@@ -173,6 +173,7 @@ export default {
         let ret = await this.$koa2Api.addAddress(params)
         if (+ret.data._errCode === 0) {
           Toast.success('添加成功')
+          this.$router.go(-1)
         } else {
           Toast.fail(ret.data._errStr)
         }

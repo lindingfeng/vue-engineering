@@ -112,16 +112,17 @@ export default {
 
 <style lang="postcss" scoped>
 .index-page {
-  height: 100vh;
-  padding: 64px 20px 0;
+  min-height: 100vh;
+  padding: 64px 20px 20px;
   background-color: #f8f8f8;
+  box-sizing: border-box;
   .top-desc {
     margin-bottom: 40px;
     font-size: 14px;
     color: #7d7e80;
   }
   /deep/ .van-collapse-item {
-    margin-bottom: 16px;
+    margin-top: 16px;
     border-radius: 5px;
     overflow: hidden;
   }
