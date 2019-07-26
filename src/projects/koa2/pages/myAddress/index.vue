@@ -100,6 +100,9 @@ export default {
   display: flex;
   align-items: center;
 }
+.name-phone p {
+  font-weight: bold;
+}
 .left-user-info .name {
   margin-right: 20px;
 }
@@ -110,6 +113,7 @@ export default {
 }
 .address-info img {
   width: 14px;
+  margin-right: 4px;
   height: 14px;
 }
 .address-info p {
