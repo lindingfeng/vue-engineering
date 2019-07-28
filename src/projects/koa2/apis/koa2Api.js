@@ -39,7 +39,8 @@ export default {
   getCategory () {
     return request({
       url: '/api/getCategory',
-      method: 'post'
+      method: 'post',
+      data: {}
     })
   },
   uploadfile (data) {
