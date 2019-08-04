@@ -22,7 +22,7 @@ export default new Router({
           path: 'index',
           name: 'index',
           component: () => import('@@/pages/index'),
-          meta: { title: '首页', icon: 'home', noCache: true }
+          meta: { title: '首页', icon: 'home' }
         }
       ]
     },
@@ -30,20 +30,40 @@ export default new Router({
       path: '/shop',
       name: 'shop',
       component: Layout,
-      meta: { title: '商品管理', icon: 'shop', noCache: true },
+      meta: { title: '商品管理', icon: 'shop' },
       children: [
         {
           path: 'shopList',
           name: 'shopList',
           component: () => import('@@/pages/shop/shopList'),
-          meta: { title: '商品列表', icon: 'index', noCache: true }
+          meta: { title: '商品列表' }
         },
         {
           path: 'shopCategory',
           name: 'shopCategory',
           component: () => import('@@/pages/shop/shopCategory'),
-          meta: { title: '商品分类', icon: 'index', noCache: true }
-        }
+          meta: { title: '商品分类' }
+        },
+        // {
+        //   path: 'addSub',
+        //   name: 'addSub',
+        //   component: () => import('@@/pages/shop/addSub'),
+        //   meta: { title: '商品加减' },
+        //   children: [
+        //     {
+        //       path: 'add',
+        //       name: 'add',
+        //       component: () => import('@@/pages/shop/addSub/add'),
+        //       meta: { title: '商品加' }
+        //     },
+        //     {
+        //       path: 'sub',
+        //       name: 'sub',
+        //       component: () => import('@@/pages/shop/addSub/sub'),
+        //       meta: { title: '商品减' }
+        //     }
+        //   ]
+        // }
       ]
     }
   ]

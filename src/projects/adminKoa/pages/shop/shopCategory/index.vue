@@ -29,7 +29,7 @@
       </el-table-column>
       <el-table-column width="70" label="序号">
         <template slot-scope="scope">
-          <p>{{scope.$index+1}}</p>
+          <p>{{(currentPage - 1) * pageSize + (scope.$index+1)}}</p>
         </template>
       </el-table-column>
       <el-table-column label="分类名称">
@@ -68,6 +68,19 @@
         </template>
       </el-table-column>
     </el-table>
+
+    <!-- 分页 -->
+    <div v-if="total>0" class="pagination-box">
+      <el-pagination
+        background
+        prev-text="上一页"
+        next-text="下一页"
+        layout="prev, pager, next, jumper"
+        :current-page="currentPage"
+        :total="total"
+        @current-change="currentChange">
+      </el-pagination>
+    </div>
 
     <!-- 分类弹窗 -->
     <el-dialog
@@ -123,6 +136,7 @@ import {
   RadioGroup,
   Radio,
   Upload,
+  Pagination
 } from 'element-ui'
 
 const initCategory = {
@@ -144,6 +158,7 @@ export default {
     [RadioGroup.name]: RadioGroup,
     [Radio.name]: Radio,
     [Upload.name]: Upload,
+    [Pagination.name]: Pagination,
   },
   data () {
     return {
@@ -152,7 +167,10 @@ export default {
       form: {
         ...initCategory
       },
-      category_id: ''
+      category_id: '',
+      currentPage: 1,
+      pageSize: 10,
+      total: 0
     }
   },
   methods: {
@@ -161,11 +179,14 @@ export default {
      * @author: lindingfeng
      * @date: 2019-08-02 22:37:32
     */
-    async getCategory (formdata) {
+    async getCategory () {
       try {
-        let ret = await this.$adminKoa.getCategory()
+        let ret = await this.$adminKoa.getCategory({
+          pageIndex: this.currentPage
+        })
         if (+ret.data._errCode === 0) {
           this.categoryList = ret.data._data.categoryList
+          this.total = ret.data._data.total
         } else {
           this.$message.error({
             message: ret.data._errStr,
@@ -184,7 +205,9 @@ export default {
     */
     async operationCategory () {
       const params = {
-        ...this.form
+        ...this.form,
+        pageIndex: this.currentPage,
+        pageSize: this.pageSize
       }
       if (this.category_id) {
         params.category_id = this.category_id
@@ -243,6 +266,15 @@ export default {
       this.operationCategory()
     },
     /*
+     * @description: 分页
+     * @author: lindingfeng
+     * @date: 2019-08-04 19:14:17
+    */
+    currentChange(e){
+      this.currentPage = e
+      this.getCategory()
+    },
+    /*
      * @description: 上传成功回调
      * @author: lindingfeng
      * @date: 2019-08-02 22:37:07
@@ -261,7 +293,6 @@ export default {
     }
   },
   mounted () {
-    console.log(this.$router)
     this.getCategory()
   }
 }
@@ -289,6 +320,11 @@ export default {
   }
   .el-input {
     width: 250px;
+  }
+  .pagination-box {
+    padding: 20px 0;
+    display: flex;
+    justify-content: flex-end;
   }
 }
 .category-icon-content {

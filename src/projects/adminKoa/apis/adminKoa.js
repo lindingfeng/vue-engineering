@@ -1,18 +1,18 @@
 import request from '@@/utils/request'
 
 export default {
-  getShopList () {
+  getShopList (data) {
     return request({
       url: '/api/getShopList',
       method: 'post',
-      data: {}
+      data: data
     })
   },
-  getCategory () {
+  getCategory (data) {
     return request({
       url: '/api/getCategory',
       method: 'post',
-      data: {}
+      data: data
     })
   },
   operationCategory (data) {

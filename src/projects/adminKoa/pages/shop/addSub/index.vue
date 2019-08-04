@@ -1,5 +1,5 @@
 <template>
-  <div class="main-page">
+  <div>
     <transition name="slide" mode="out-in">
       <router-view/>
     </transition>
@@ -14,11 +14,6 @@ export default {
 </script>
 
 <style lang="postcss" scoped>
-.main-page {
-  margin-left: 180px;
-  margin-top: 50px;
-  padding: 15px;
-}
 .slide-enter-active,
 .slide-leave-active {
   transition: all .3s ease;

@@ -1,44 +1,38 @@
 <template>
-  <div class="aside-page">
-    <div class="logo">
-      <img src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2204402038,3571693478&fm=26&gp=0.jpg" alt="">
-      <p>admin</p>
-    </div>
-    <el-scrollbar style="height: calc(100% - 150px);">
-      <el-menu
-        :default-active="$route.path"
-        class="el-menu-vertical-demo"
-        :router="true"
-        background-color="#304156"
-        text-color="#bfcbd9"
-        active-text-color="#ffd04b">
-        <!-- <el-menu-item index="1">
-          <svg-icon icon-class="home"/>
-          <span>首页</span>
-        </el-menu-item>
-        <el-submenu index="2">
-          <template slot="title">
-            <svg-icon icon-class="shop"/>
-            <span>商品管理</span>
-          </template>
-          <el-menu-item index="2-1" :route="{ path: '/shop/shopList' }">商品列表</el-menu-item>
-          <el-menu-item index="2-2" :route="{ path: '/shop/shopCategory' }">商品分类</el-menu-item>
-        </el-submenu> -->
-        <template v-for="item in routes" v-if="item.children">
-          <el-submenu v-if="item.children.length>1" :index="item.path">
-            <template slot="title">
-              <svg-icon :icon-class="item.meta.icon"/>
-              <span>{{item.meta.title}}</span>
-            </template>
-            <el-menu-item v-for="(child, idx) in item.children" :index="`${item.path}/${child.path}`" :key="idx" :route="{ path: `${item.path}/${child.path}` }">商品列表</el-menu-item>
-          </el-submenu>
-          <el-menu-item v-else :index="`${item.path}/${item.children[0].path}`" :route="{ path: `${item.path}/${item.children[0].path}` }">
-            <svg-icon :icon-class="item.children[0].meta.icon"/>
-            <span>{{item.children[0].meta.title}}</span>
+  <div class="aside-item-page">
+    <template v-if="item.children">
+      <el-submenu v-if="item.children.length>1" :index="resolvePath(item.path)">
+        <template slot="title">
+          <svg-icon v-if="item.meta.icon" :icon-class="item.meta.icon"/>
+          <span>{{item.meta.title}}</span>
+        </template>
+        <template v-for="child in item.children">
+          <asides
+            v-if="child.children&&child.children.length"
+            class="nest-menu"
+            :item="child"
+            :key="child.path"
+            :base-path="resolvePath(child.path)"
+          />
+          <el-menu-item
+            v-else
+            :key="child.path"
+            :index="resolvePath(child.path)"
+            :route="{ path: resolvePath(child.path) }"
+          >
+            {{child.meta.title}}
           </el-menu-item>
         </template>
-      </el-menu>
-    </el-scrollbar>
+      </el-submenu>
+      <el-menu-item
+        v-else
+        :index="resolvePath(item.children[0].path)"
+        :route="{ path: resolvePath(item.children[0].path) }"
+      >
+        <svg-icon :icon-class="item.children[0].meta.icon"/>
+        <span>{{item.children[0].meta.title}}</span>
+      </el-menu-item>
+    </template>
   </div>
 </template>
 
@@ -47,22 +41,22 @@ import {
   Menu,
   Submenu,
   MenuItemGroup,
-  MenuItem,
-  Scrollbar
+  MenuItem
 } from 'element-ui'
 
 export default {
+  name: 'asides',
+  props: {
+    item: Object,
+    basePath: {
+      type: String,
+      default: ''
+    }
+  },
   components: {
-    [Menu.name]: Menu,
     [Submenu.name]: Submenu,
     [MenuItemGroup.name]: MenuItemGroup,
-    [MenuItem.name]: MenuItem,
-    [Scrollbar.name]: Scrollbar
-  },
-  computed: {
-    routes () {
-      return this.$router.options.routes
-    }
+    [MenuItem.name]: MenuItem
   },
   methods: {
     handleOpen(key, keyPath) {
@@ -70,49 +64,22 @@ export default {
     },
     handleClose(key, keyPath) {
       console.log(key, keyPath);
+    },
+    resolvePath(routePath) {
+      return `${this.basePath}/${routePath}`
     }
   },
   mounted () {
-    console.log(this.$route)
+    // console.log(this.$route)
   }
 }
 </script>
 
 <style lang="postcss" scoped>
-.aside-page {
-  position: fixed;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 180px;
-  height: 100%;
-  background-color: #304156;
-  .logo {
-    height: 150px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    img {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-    }
-    p {
-      margin-top: 10px;
-      font-size: 16px;
-      color: #ffffff;
-    }
-  }
-  /deep/ .el-menu {
-    border-right: 0;
-  }
+.aside-item-page {
   /deep/ .el-submenu,
   /deep/ .el-menu-item {
     min-width: auto;
-  }
-  /deep/ .el-scrollbar__wrap{
-    overflow-x: hidden;
   }
   /deep/ .svg-icon {
     margin-right: 10px;
@@ -124,6 +91,9 @@ export default {
   }
   /deep/ .el-submenu .el-menu-item:hover {
     background-color: #001528 !important;
+  }
+  .nest-menu /deep/ .el-submenu>.el-submenu__title {
+    background-color: #1f2d3d !important;
   }
 }
 </style>

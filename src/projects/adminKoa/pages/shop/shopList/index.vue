@@ -40,7 +40,7 @@
       </el-table-column>
       <el-table-column width="70" label="序号">
         <template slot-scope="scope">
-          <p>{{scope.$index+1}}</p>
+          <p>{{(currentPage - 1) * pageSize + (scope.$index+1)}}</p>
         </template>
       </el-table-column>
       <el-table-column label="商品名称">
@@ -112,6 +112,19 @@
         </template>
       </el-table-column>
     </el-table>
+
+    <!-- 分页 -->
+    <div v-if="total>0" class="pagination-box">
+      <el-pagination
+        background
+        prev-text="上一页"
+        next-text="下一页"
+        layout="prev, pager, next, jumper"
+        :current-page="currentPage"
+        :total="total"
+        @current-change="currentChange">
+      </el-pagination>
+    </div>
   </div>
 </template>
 
@@ -119,26 +132,40 @@
 import {
   Button,
   Table,
-  TableColumn
+  TableColumn,
+  Pagination
 } from 'element-ui'
 
 export default {
   components: {
     [Button.name]: Button,
     [Table.name]: Table,
-    [TableColumn.name]: TableColumn
+    [TableColumn.name]: TableColumn,
+    [Pagination.name]: Pagination,
   },
   data () {
     return {
-      shopList: []
+      shopList: [],
+      currentPage: 1,
+      pageSize: 10,
+      total: 0
     }
   },
   methods: {
-    async getShopList (formdata) {
+    /*
+     * @description: 获取商品列表
+     * @author: lindingfeng
+     * @date: 2019-08-04 21:26:19
+    */
+    async getShopList () {
       try {
-        let ret = await this.$adminKoa.getShopList()
+        let ret = await this.$adminKoa.getShopList({
+          pageIndex: this.currentPage,
+          pageSize: this.pageSize
+        })
         if (+ret.data._errCode === 0) {
           this.shopList = ret.data._data.shopList
+          this.total = ret.data._data.total
         } else {
           Toast.fail(ret.data._errStr)
         }
@@ -147,6 +174,20 @@ export default {
         console.log(err)
       }
     },
+    /*
+     * @description: 分页
+     * @author: lindingfeng
+     * @date: 2019-08-04 19:14:17
+    */
+    currentChange(e){
+      this.currentPage = e
+      this.getShopList()
+    },
+    /*
+     * @description: 商品操作
+     * @author: lindingfeng
+     * @date: 2019-08-04 21:26:43
+    */
     shopOperation (type, id) {
       console.log(id)
     }
@@ -171,6 +212,11 @@ export default {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+  .pagination-box {
+    padding: 20px 0;
+    display: flex;
+    justify-content: flex-end;
   }
 }
 .red {
