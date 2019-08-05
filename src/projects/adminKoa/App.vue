@@ -8,7 +8,7 @@
 export default {
   name: 'App',
   mounted () {
-    console.log(this.$router)
+    // console.log(this.$router)
   }
 }
 </script>

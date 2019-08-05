@@ -134,25 +134,31 @@
 
     <!-- 商品弹窗 -->
     <el-dialog
-      width="600px"
+      width="650px"
       :title="shop_id ? '编辑商品' : '添加商品'"
       :visible.sync="dialogVisible"
       :lock-scroll="false"
     >
-      <el-form ref="form" :model="form" label-width="80px">
-        <el-form-item label="商品名称">
-          <el-input size="small" v-model="form.shop_name"></el-input>
+      <el-form
+        ref="form"
+        inline-message
+        label-width="80px"
+        :model="form"
+        :rules="formRules"
+      >
+        <el-form-item label="商品名称" prop="shop_name" >
+          <el-input size="small" v-model="form.shop_name" placeholder="请输入商品名称"></el-input>
         </el-form-item>
-        <el-form-item label="商品分类">
-          <el-select size="small" v-model="form.region" placeholder="请选择商品分类">
-            <el-option value="1">区域一</el-option>
+        <el-form-item label="商品分类" prop="shop_category_id" >
+          <el-select size="small" v-model="form.shop_category_id" placeholder="请选择商品分类">
+            <el-option v-for="(item, index) in categoryList" :label="item.category_name" :value="item.category_id" :key="index" />
           </el-select>
         </el-form-item>
-        <el-form-item label="商品价格">
-          <el-input size="small" v-model="form.shop_price"></el-input>
+        <el-form-item label="商品价格" prop="shop_price">
+          <el-input size="small" v-model="form.shop_price" placeholder="请输入商品价格"></el-input>
         </el-form-item>
-        <el-form-item label="商品详情">
-          <el-input size="small" v-model="form.shop_detail"></el-input>
+        <el-form-item label="商品详情" prop="shop_detail">
+          <el-input size="small" v-model="form.shop_detail" placeholder="请输入商品详情"></el-input>
         </el-form-item>
         <el-form-item label="商品轮播">
           <div class="category-icon-content">
@@ -175,16 +181,16 @@
             <el-radio label="0">下架</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="商品库存">
-          <el-input size="small" v-model="form.shop_num"></el-input>
+        <el-form-item label="商品库存" prop="shop_num">
+          <el-input size="small" v-model="form.shop_num" placeholder="请输入商品库存"></el-input>
         </el-form-item>
-        <el-form-item label="商品运费">
-          <el-input size="small" v-model="form.shop_freight"></el-input>
+        <el-form-item label="商品运费" prop="shop_freight">
+          <el-input size="small" v-model="form.shop_freight" placeholder="请输入商品运费"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="submitShop">确 定</el-button>
+        <el-button type="primary" @click="submitShop('form')">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -209,7 +215,7 @@ import {
 
 const initShop = {
   shop_category: '',
-  shop_categoryId: '',
+  shop_category_id: '',
   shop_name: '',
   shop_price: '',
   shop_detail: '',
@@ -236,8 +242,28 @@ export default {
     [Pagination.name]: Pagination,
   },
   data () {
+    const validatePrice = (rule, value, callback) => {
+      // console.log(rule, value, callback)
+      if (
+        !/(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/.test(value)
+      ) {
+        callback(new Error('请输入正确的价格'))
+        return
+      }
+      callback()
+    }
+    const validateNumber = (rule, value, callback) => {
+      if (
+        !/^([0]{1}|[1-9]{1}[0-9]*)$/.test(value)
+      ) {
+        callback(new Error('请输入正确的数量'))
+        return
+      }
+      callback()
+    }
     return {
       shopList: [],
+      categoryList: [],
       dialogVisible: false,
       form: {
         shop_banner: [],
@@ -246,12 +272,35 @@ export default {
       shop_id: '',
       currentPage: 1,
       pageSize: 10,
-      total: 0
+      total: 0,
+      formRules: {
+        shop_name: [
+          { required: true, message: '请输入商品名称', trigger: 'blur' }
+        ],
+        shop_category_id: [
+          { required: true, message: '请选择商品分类', trigger: 'blur' }
+        ],
+        shop_price: [
+          { required: true, message: '请输入商品价格', trigger: 'blur' },
+          { validator: validatePrice, trigger: 'blur' }
+        ],
+        shop_detail: [
+          { required: true, message: '请输入商品详情', trigger: 'blur' }
+        ],
+        shop_num: [
+          { required: true, message: '请输入商品库存', trigger: 'blur' },
+          { validator: validateNumber, trigger: 'blur' }
+        ],
+        shop_freight: [
+          { required: true, message: '请输入商品运费', trigger: 'blur' },
+          { validator: validatePrice, trigger: 'blur' }
+        ],
+      }
     }
   },
   methods: {
     /*
-     * @description: 获取商品列表
+     * @description: 获取商品列表(API)
      * @author: lindingfeng
      * @date: 2019-08-04 21:26:19
     */
@@ -272,6 +321,30 @@ export default {
         console.log(err)
       }
     },
+    /*
+     * @description: 获取分类列表(API)
+     * @author: lindingfeng
+     * @date: 2019-08-05 21:03:25
+    */
+    async getCategory () {
+      try {
+        let ret = await this.$adminKoa.getCategory({
+          pageIndex: this.currentPage
+        })
+        if (+ret.data._errCode === 0) {
+          this.categoryList = ret.data._data.categoryList
+          this.total = ret.data._data.total
+        } else {
+          this.$message.error({
+            message: ret.data._errStr,
+            duration: 1500
+          })
+        }
+
+      } catch (err) {
+        console.log(err)
+      }
+    },
     showShopDialog () {
       this.shop_id = ''
       this.form.shop_banner = []
@@ -281,8 +354,12 @@ export default {
       this.dialogVisible = true
     },
     // 提交商品信息
-    submitShop () {
-      console.log('提交商品信息')
+    submitShop (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          alert('submit!');
+        }
+      });
     },
     /*
      * @description: 分页
@@ -323,8 +400,8 @@ export default {
     }
   },
   mounted () {
-    console.log(this.$router)
     this.getShopList()
+    this.getCategory()
   }
 }
 </script>
@@ -352,7 +429,7 @@ export default {
     margin-bottom: 10px;
   }
   .el-input, .el-select {
-    width: 250px;
+    width: 350px;
   }
 }
 .category-icon-content {
