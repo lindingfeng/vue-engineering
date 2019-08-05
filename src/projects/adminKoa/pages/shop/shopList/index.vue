@@ -4,28 +4,33 @@
       <el-button
         size="small"
         type="danger"
-        style="padding: 10px;">
+        style="padding: 10px;"
+      >
         <i class="el-icon-delete" style="margin-right: 3px;"></i>
         批量删除
       </el-button>
       <el-button
         size="small"
         type="success"
-        style="padding: 10px;">
+        style="padding: 10px;"
+      >
         <i class="el-icon-upload2" style="margin-right: 3px;"></i>
         批量上架
       </el-button>
       <el-button
         size="small"
         type="warning"
-        style="padding: 10px;">
+        style="padding: 10px;"
+      >
         <i class="el-icon-download" style="margin-right: 3px;"></i>
         批量下架
       </el-button>
       <el-button
         size="small"
         type="primary"
-        style="padding: 10px;">
+        style="padding: 10px;"
+        @click="showShopDialog"
+      >
         <i class="el-icon-circle-plus-outline" style="margin-right: 3px;"></i>
         添加商品
       </el-button>
@@ -34,7 +39,8 @@
       :data="shopList"
       border
       :header-cell-style="{textAlign: 'center', background:'#F6F6F6'}"
-      :cell-style="{textAlign: 'center'}">
+      :cell-style="{textAlign: 'center'}"
+    >
       <el-table-column
         type="selection">
       </el-table-column>
@@ -125,6 +131,62 @@
         @current-change="currentChange">
       </el-pagination>
     </div>
+
+    <!-- 商品弹窗 -->
+    <el-dialog
+      width="600px"
+      :title="shop_id ? '编辑商品' : '添加商品'"
+      :visible.sync="dialogVisible"
+      :lock-scroll="false"
+    >
+      <el-form ref="form" :model="form" label-width="80px">
+        <el-form-item label="商品名称">
+          <el-input size="small" v-model="form.shop_name"></el-input>
+        </el-form-item>
+        <el-form-item label="商品分类">
+          <el-select size="small" v-model="form.region" placeholder="请选择商品分类">
+            <el-option value="1">区域一</el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="商品价格">
+          <el-input size="small" v-model="form.shop_price"></el-input>
+        </el-form-item>
+        <el-form-item label="商品详情">
+          <el-input size="small" v-model="form.shop_detail"></el-input>
+        </el-form-item>
+        <el-form-item label="商品轮播">
+          <div class="category-icon-content">
+            <!-- <div class="category-icon"></div> -->
+            <el-upload
+              class="avatar-uploader"
+              action="http://132.232.35.229:3000/api/uploadfile"
+              :show-file-list="false"
+              :on-success="uploadSuccess"
+              :on-error="uploadError"
+            >
+              <img v-if="form.category_icon" :src="form.category_icon" class="avatar">
+              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>
+          </div>
+        </el-form-item>
+        <el-form-item label="商品状态">
+          <el-radio-group v-model="form.shop_status">
+            <el-radio label="1">上架</el-radio>
+            <el-radio label="0">下架</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="商品库存">
+          <el-input size="small" v-model="form.shop_num"></el-input>
+        </el-form-item>
+        <el-form-item label="商品运费">
+          <el-input size="small" v-model="form.shop_freight"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="submitShop">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -133,19 +195,55 @@ import {
   Button,
   Table,
   TableColumn,
+  Dialog,
+  Form,
+  FormItem,
+  Input,
+  Select,
+  Option,
+  RadioGroup,
+  Radio,
+  Upload,
   Pagination
 } from 'element-ui'
+
+const initShop = {
+  shop_category: '',
+  shop_categoryId: '',
+  shop_name: '',
+  shop_price: '',
+  shop_detail: '',
+  shop_num: '',
+  shop_freight: '',
+  shop_status: '1',
+  region: ''
+}
 
 export default {
   components: {
     [Button.name]: Button,
     [Table.name]: Table,
     [TableColumn.name]: TableColumn,
+    [Dialog.name]: Dialog,
+    [Form.name]: Form,
+    [FormItem.name]: FormItem,
+    [Input.name]: Input,
+    [Select.name]: Select,
+    [Option.name]: Option,
+    [RadioGroup.name]: RadioGroup,
+    [Radio.name]: Radio,
+    [Upload.name]: Upload,
     [Pagination.name]: Pagination,
   },
   data () {
     return {
       shopList: [],
+      dialogVisible: false,
+      form: {
+        shop_banner: [],
+        ...initShop
+      },
+      shop_id: '',
       currentPage: 1,
       pageSize: 10,
       total: 0
@@ -174,6 +272,18 @@ export default {
         console.log(err)
       }
     },
+    showShopDialog () {
+      this.shop_id = ''
+      this.form.shop_banner = []
+      this.form = {
+        ...initShop
+      }
+      this.dialogVisible = true
+    },
+    // 提交商品信息
+    submitShop () {
+      console.log('提交商品信息')
+    },
     /*
      * @description: 分页
      * @author: lindingfeng
@@ -190,6 +300,26 @@ export default {
     */
     shopOperation (type, id) {
       console.log(id)
+    },
+    /*
+     * @description: 上传成功回调
+     * @author: lindingfeng
+     * @date: 2019-08-02 22:37:07
+    */
+    uploadSuccess (res, file, fileList) {
+      // console.log(res, file, fileList)
+      this.form.category_icon = res._data.src
+    },
+    /*
+     * @description: 上传失败回调
+     * @author: lindingfeng
+     * @date: 2019-08-02 22:37:07
+    */
+    uploadError (err, file, fileList) {
+      this.$message.error({
+        message: '图片上传失败',
+        duration: 1500
+      })
     }
   },
   mounted () {
@@ -217,6 +347,43 @@ export default {
     padding: 20px 0;
     display: flex;
     justify-content: flex-end;
+  }
+  .el-form-item {
+    margin-bottom: 10px;
+  }
+  .el-input, .el-select {
+    width: 250px;
+  }
+}
+.category-icon-content {
+  padding-top: 8px;
+  .category-icon {
+    width: 100px;
+    height: 100px;
+    background-color: #f00;
+  }
+  /deep/ .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 100px;
+    height: 100px;
+    line-height: 100px;
+    text-align: center;
+  }
+  .avatar {
+    width: 100px;
+    height: 100px;
+    display: block;
   }
 }
 .red {

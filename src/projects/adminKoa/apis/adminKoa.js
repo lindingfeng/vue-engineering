@@ -21,5 +21,12 @@ export default {
       method: 'post',
       data: data
     })
+  },
+  deleteCategory (data) {
+    return request({
+      url: '/api/deleteCategory',
+      method: 'post',
+      data: data
+    })
   }
 }

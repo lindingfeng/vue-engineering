@@ -65,6 +65,18 @@ export default new Router({
         //   ]
         // }
       ]
-    }
+    },
+    {
+      path: '/ad',
+      component: Layout,
+      children: [
+        {
+          path: 'banner',
+          name: 'banner',
+          component: () => import('@@/pages/ad'),
+          meta: { title: '广告管理', icon: 'ad' }
+        }
+      ]
+    },
   ]
 })

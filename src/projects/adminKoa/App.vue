@@ -34,4 +34,7 @@ body {
 .el-table th.gutter {
   display: table-cell !important;
 }
+.el-message {
+  min-width: 0 !important;
+}
 </style>

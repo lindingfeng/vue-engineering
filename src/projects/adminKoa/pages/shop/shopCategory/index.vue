@@ -5,6 +5,7 @@
         size="small"
         type="danger"
         style="padding: 10px;"
+        @click="deleteTogether"
       >
         <i class="el-icon-delete" style="margin-right: 3px;"></i>
         批量删除
@@ -20,10 +21,12 @@
       </el-button>
     </div>
     <el-table
-      :data="categoryList"
       border
-      :header-cell-style="{textAlign: 'center', background:'#F6F6F6',}"
-      :cell-style="{textAlign: 'center'}">
+      :data="categoryList"
+      :header-cell-style="{textAlign: 'center', background:'#F6F6F6'}"
+      :cell-style="{textAlign: 'center'}"
+      @selection-change="selectionChange"
+    >
       <el-table-column
         type="selection">
       </el-table-column>
@@ -84,10 +87,10 @@
 
     <!-- 分类弹窗 -->
     <el-dialog
-      title="添加分类"
+      width="600px"
+      :title="category_id ? '编辑分类' : '添加分类'"
       :visible.sync="dialogVisible"
       :lock-scroll="false"
-      width="600px"
     >
       <el-form ref="form" :model="form" label-width="80px">
         <el-form-item label="分类名称">
@@ -163,6 +166,7 @@ export default {
   data () {
     return {
       categoryList: [],
+      selectList: [],
       dialogVisible: false,
       form: {
         ...initCategory
@@ -175,7 +179,7 @@ export default {
   },
   methods: {
     /*
-     * @description: 获取分类列表
+     * @description: 获取分类列表(API)
      * @author: lindingfeng
      * @date: 2019-08-02 22:37:32
     */
@@ -199,7 +203,7 @@ export default {
       }
     },
     /*
-     * @description: 添加/编辑分类
+     * @description: 添加/编辑分类(API)
      * @author: lindingfeng
      * @date: 2019-08-03 14:30:55
     */
@@ -220,6 +224,36 @@ export default {
             message: params.category_id ? '分类修改成功!' : '分类添加成功!',
             duration: 1500
           })
+          if (!params.category_id) {
+            this.currentPage = 1
+          }
+          this.getCategory()
+        } else {
+          this.$message.error({
+            message: ret.data._errStr,
+            duration: 1500
+          })
+        }
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    /*
+     * @Description: 单个/批量删除分类(API)
+     * @Author: lindingfeng
+     * @Date: 2019-08-05 15:20:10
+    */
+   async deleteCategory (category_ids) {
+      try {
+        let ret = await this.$adminKoa.deleteCategory({
+          category_ids
+        })
+        if (+ret.data._errCode === 0) {
+          this.$message.success({
+            message: '分类删除成功!',
+            duration: 1500
+          })
+          this.currentPage = 1
           this.getCategory()
         } else {
           this.$message.error({
@@ -249,13 +283,25 @@ export default {
      * @date: 2019-08-02 22:36:58
     */
     shopOperation (type, item) {
-      this.dialogVisible = true
-      this.category_id = item.category_id
-      this.form = {
-        category_name: item.category_name,
-        category_icon: item.category_icon,
-        category_status: item.category_status.toString()
+      if (+type === 0) {
+        this.dialogVisible = true
+        this.category_id = item.category_id
+        this.form = {
+          category_name: item.category_name,
+          category_icon: item.category_icon,
+          category_status: item.category_status.toString()
+        }
+        return
       }
+      this.$confirm('此操作将永久删除该分类, 是否继续?', '提示', {
+        confirmButtonText: '删除',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.deleteCategory(item.category_id)
+      }).catch(() => {
+        console.log('已取消删除')
+      })
     },
     /*
      * @description: 添加/编辑分类
@@ -264,6 +310,42 @@ export default {
     */
     submitCategory () {
       this.operationCategory()
+    },
+    /*
+     * @Description: 返回所有选中的数据(Array)
+     * @Author: lindingfeng
+     * @Date: 2019-08-05 17:31:56
+    */
+    selectionChange (selection) {
+      // console.log('selectionChange', selection)
+      this.selectList = selection;
+    },
+    /*
+     * @Description: 批量删除分类
+     * @Author: lindingfeng
+     * @Date: 2019-08-05 17:36:42
+    */
+    deleteTogether () {
+      let category_ids = []
+      if (!this.selectList.length) {
+        this.$message.error({
+          message: '请选择需要删除的分类!',
+          duration: 1500
+        })
+        return
+      }
+      this.$confirm('此操作将永久删除所选分类, 是否继续?', '提示', {
+        confirmButtonText: '删除',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.selectList.forEach(ele => {
+          category_ids.push(ele.category_id)
+        })
+        this.deleteCategory(category_ids.join(','))
+      }).catch(() => {
+        console.log('已取消删除')
+      })
     },
     /*
      * @description: 分页
@@ -289,11 +371,18 @@ export default {
      * @date: 2019-08-02 22:37:07
     */
     uploadError (err, file, fileList) {
-      // console.log(err, file, fileList)
+      this.$message.error({
+        message: '图片上传失败',
+        duration: 1500
+      })
     }
   },
   mounted () {
     this.getCategory()
+    // let arr = [5, 6, 7]
+    // let str = '1,2,3'
+    // console.log(arr.join(',')) // "5,6,7"
+    // console.log(str.split(',')) // ["1", "2", "3"]
   }
 }
 </script>

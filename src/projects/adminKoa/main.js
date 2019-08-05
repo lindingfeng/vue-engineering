@@ -6,7 +6,7 @@ import router from './router'
 import store from './store'
 import '@@/pages/layout/imgs'
 import adminKoa from './apis/adminKoa'
-import { Message } from 'element-ui'
+import { Message, MessageBox } from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
 // 模拟接口数据(mock)
@@ -24,6 +24,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 // })
 
 Vue.prototype.$message = Message
+Vue.prototype.$confirm = MessageBox.confirm;
 Vue.prototype.$adminKoa = adminKoa
 
 Vue.config.productionTip = false
