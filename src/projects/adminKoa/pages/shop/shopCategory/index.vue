@@ -318,7 +318,7 @@ export default {
     */
     selectionChange (selection) {
       // console.log('selectionChange', selection)
-      this.selectList = selection;
+      this.selectList = selection
     },
     /*
      * @Description: 批量删除分类

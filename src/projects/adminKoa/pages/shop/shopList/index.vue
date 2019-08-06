@@ -29,17 +29,18 @@
         size="small"
         type="primary"
         style="padding: 10px;"
-        @click="showShopDialog"
+        @click="shopDialog"
       >
         <i class="el-icon-circle-plus-outline" style="margin-right: 3px;"></i>
         添加商品
       </el-button>
     </div>
     <el-table
-      :data="shopList"
       border
+      :data="shopList"
       :header-cell-style="{textAlign: 'center', background:'#F6F6F6'}"
       :cell-style="{textAlign: 'center'}"
+      @selection-change="selectionChange"
     >
       <el-table-column
         type="selection">
@@ -88,7 +89,7 @@
       <el-table-column width="100" label="商品状态">
         <template slot-scope="scope">
           <span v-if="scope.row.shop_status == 1">上架</span>
-          <span v-else>下架</span>
+          <span v-else class="red">下架</span>
         </template>
       </el-table-column>
       <el-table-column width="250" label="操作">
@@ -96,24 +97,24 @@
           <el-button
             size="mini"
             type="primary"
-            @click="shopOperation(0, scope.row.shop_id)"
+            @click="shopOperation(0, scope.row)"
           >编辑</el-button>
           <el-button
             size="mini"
             type="danger"
-            @click="shopOperation(1, scope.row.shop_id)"
+            @click="shopOperation(1, scope.row)"
           >删除</el-button>
           <el-button
             v-if="scope.row.shop_status == 0"
             size="mini"
             type="success"
-            @click="shopOperation(2, scope.row.shop_id)"
+            @click="shopOperation(2, scope.row)"
           >上架</el-button>
           <el-button
             v-if="scope.row.shop_status == 1"
             size="mini"
             type="warning"
-            @click="shopOperation(3, scope.row.shop_id)"
+            @click="shopOperation(3, scope.row)"
           >下架</el-button>
         </template>
       </el-table-column>
@@ -135,6 +136,7 @@
     <!-- 商品弹窗 -->
     <el-dialog
       width="650px"
+      top="80px"
       :title="shop_id ? '编辑商品' : '添加商品'"
       :visible.sync="dialogVisible"
       :lock-scroll="false"
@@ -150,35 +152,51 @@
           <el-input size="small" v-model="form.shop_name" placeholder="请输入商品名称"></el-input>
         </el-form-item>
         <el-form-item label="商品分类" prop="shop_category_id" >
-          <el-select size="small" v-model="form.shop_category_id" placeholder="请选择商品分类">
-            <el-option v-for="(item, index) in categoryList" :label="item.category_name" :value="item.category_id" :key="index" />
+          <el-select size="small" v-model="form.shop_category_id" placeholder="请选择商品分类" @blur="selectBlur">
+            <el-option
+              v-for="(item, index) in categoryList"
+              :label="item.category_name"
+              :value="item.category_id"
+              :key="index"
+            />
           </el-select>
         </el-form-item>
         <el-form-item label="商品价格" prop="shop_price">
           <el-input size="small" v-model="form.shop_price" placeholder="请输入商品价格"></el-input>
         </el-form-item>
-        <el-form-item label="商品详情" prop="shop_detail">
-          <el-input size="small" v-model="form.shop_detail" placeholder="请输入商品详情"></el-input>
+        <el-form-item label="商品详情" prop="shop_content">
+          <el-input size="small" v-model="form.shop_content" placeholder="请输入商品详情"></el-input>
         </el-form-item>
-        <el-form-item label="商品轮播">
+        <el-form-item label="商品轮播" required>
           <div class="category-icon-content">
-            <!-- <div class="category-icon"></div> -->
-            <el-upload
-              class="avatar-uploader"
-              action="http://132.232.35.229:3000/api/uploadfile"
-              :show-file-list="false"
-              :on-success="uploadSuccess"
-              :on-error="uploadError"
-            >
-              <img v-if="form.category_icon" :src="form.category_icon" class="avatar">
-              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-            </el-upload>
+            <!-- 上传图片列表 -->
+            <ul class="uploader-image-list">
+              <li v-for="(item, index) in form.shop_banner" :key="index">
+                <img :src="item" alt="">
+                <div class="del-image" @click="delImage(index)">
+                  <i class="el-icon-circle-close"></i>
+                </div>
+              </li>
+              <li class="uploader" v-if="showUploaderBtn">
+                <el-upload
+                  class="avatar-uploader"
+                  action="http://132.232.35.229:3000/api/uploadfile"
+                  multiple
+                  accept="image/jpeg,image/png,image/jpg"
+                  :show-file-list="false"
+                  :on-success="uploadSuccess"
+                  :on-error="uploadError"
+                >
+                  <i class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>
+              </li>
+            </ul>
           </div>
         </el-form-item>
-        <el-form-item label="商品状态">
+        <el-form-item label="商品状态" required>
           <el-radio-group v-model="form.shop_status">
-            <el-radio label="1">上架</el-radio>
-            <el-radio label="0">下架</el-radio>
+            <el-radio :label="1">上架</el-radio>
+            <el-radio :label="0">下架</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="商品库存" prop="shop_num">
@@ -214,15 +232,13 @@ import {
 } from 'element-ui'
 
 const initShop = {
-  shop_category: '',
   shop_category_id: '',
   shop_name: '',
   shop_price: '',
-  shop_detail: '',
+  shop_content: '',
   shop_num: '',
   shop_freight: '',
-  shop_status: '1',
-  region: ''
+  shop_status: 1
 }
 
 export default {
@@ -240,6 +256,25 @@ export default {
     [Radio.name]: Radio,
     [Upload.name]: Upload,
     [Pagination.name]: Pagination,
+  },
+  computed: {
+    showUploaderBtn () {
+      return this.form.shop_banner.length < 8
+    }
+  },
+  watch: {
+    dialogVisible (val) {
+      if (!val) {
+        this.shop_id = ''
+        this.form = {
+          shop_banner: [],
+          ...initShop
+        }
+        this.$nextTick(() => {
+          this.$refs['form']&&this.$refs['form'].clearValidate&&this.$refs['form'].clearValidate()
+        })
+      }
+    }
   },
   data () {
     const validatePrice = (rule, value, callback) => {
@@ -264,6 +299,7 @@ export default {
     return {
       shopList: [],
       categoryList: [],
+      selectList: [],
       dialogVisible: false,
       form: {
         shop_banner: [],
@@ -278,13 +314,13 @@ export default {
           { required: true, message: '请输入商品名称', trigger: 'blur' }
         ],
         shop_category_id: [
-          { required: true, message: '请选择商品分类', trigger: 'blur' }
+          { required: true, message: '请选择商品分类', trigger: ['blur', 'change'] }
         ],
         shop_price: [
           { required: true, message: '请输入商品价格', trigger: 'blur' },
           { validator: validatePrice, trigger: 'blur' }
         ],
-        shop_detail: [
+        shop_content: [
           { required: true, message: '请输入商品详情', trigger: 'blur' }
         ],
         shop_num: [
@@ -299,6 +335,10 @@ export default {
     }
   },
   methods: {
+    selectBlur () {
+      console.log('触发select的blur事件')
+      // this.$refs['form'].validateField('shop_category_id')
+    },
     /*
      * @description: 获取商品列表(API)
      * @author: lindingfeng
@@ -333,7 +373,6 @@ export default {
         })
         if (+ret.data._errCode === 0) {
           this.categoryList = ret.data._data.categoryList
-          this.total = ret.data._data.total
         } else {
           this.$message.error({
             message: ret.data._errStr,
@@ -345,21 +384,81 @@ export default {
         console.log(err)
       }
     },
-    showShopDialog () {
-      this.shop_id = ''
-      this.form.shop_banner = []
-      this.form = {
-        ...initShop
+    /*
+     * @Description: 添加/编辑商品(API)
+     * @Author: lindingfeng
+     * @Date: 2019-08-06 11:41:51
+    */
+    async operationShop () {
+      const params = {
+        ...this.form
       }
+      if (this.shop_id) {
+        params.shop_id = this.shop_id
+      }
+      console.log(params)
+      try {
+        let ret = await this.$adminKoa.operationShop(params)
+        if (+ret.data._errCode === 0) {
+          this.dialogVisible = false
+          this.$message.success({
+            message: params.shop_id ? '商品修改成功!' : '商品添加成功!',
+            duration: 1500
+          })
+          if (!params.shop_id) {
+            this.currentPage = 1
+          }
+          this.getShopList()
+        } else {
+          this.$message.error({
+            message: ret.data._errStr,
+            duration: 1500
+          })
+        }
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    /*
+     * @Description: 添加/编辑商品弹窗
+     * @Author: lindingfeng
+     * @Date: 2019-08-06 11:24:25
+    */
+    shopDialog (type) {
       this.dialogVisible = true
+    },
+    /*
+     * @Description: 删除上传图片
+     * @Author: lindingfeng
+     * @Date: 2019-08-06 11:24:53
+    */
+    delImage (index) {
+      this.form.shop_banner.splice(index, 1)
     },
     // 提交商品信息
     submitShop (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert('submit!');
+          if (!this.form.shop_banner.length) {
+            this.$message.error({
+              message: '请上传商品banner图!',
+              duration: 1500
+            })
+            return
+          }
+          // 验证通过
+          this.operationShop()
         }
       });
+    },
+    /*
+     * @Description: 返回所有选中的数据(Array)
+     * @Author: lindingfeng
+     * @Date: 2019-08-06 15:39:11
+    */
+    selectionChange (selection) {
+      // console.log('selectionChange', selection)
+      this.selectList = selection
     },
     /*
      * @description: 分页
@@ -375,8 +474,19 @@ export default {
      * @author: lindingfeng
      * @date: 2019-08-04 21:26:43
     */
-    shopOperation (type, id) {
-      console.log(id)
+    shopOperation (type, item) {
+      console.log(item)
+      if (+type === 0) {
+        // 编辑商品
+        this.shop_id = item.shop_id
+        this.form = {
+          ...item,
+          shop_banner: [
+            ...item.shop_banner
+          ]
+        }
+        this.dialogVisible = true
+      }
     },
     /*
      * @description: 上传成功回调
@@ -385,7 +495,11 @@ export default {
     */
     uploadSuccess (res, file, fileList) {
       // console.log(res, file, fileList)
-      this.form.category_icon = res._data.src
+      if (this.form.shop_banner.length >= 8) {
+        // console.log('最多只能上传8张banner哦')
+        return
+      }
+      this.form.shop_banner.push(res._data.src)
     },
     /*
      * @description: 上传失败回调
@@ -433,18 +547,10 @@ export default {
   }
 }
 .category-icon-content {
-  padding-top: 8px;
   .category-icon {
     width: 100px;
     height: 100px;
     background-color: #f00;
-  }
-  /deep/ .avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
   }
   .avatar-uploader .el-upload:hover {
     border-color: #409EFF;
@@ -457,10 +563,47 @@ export default {
     line-height: 100px;
     text-align: center;
   }
-  .avatar {
+}
+.uploader-image-list {
+  display: flex;
+  flex-wrap: wrap;
+  li {
+    position: relative;
     width: 100px;
+    margin-right: 10px;
+    margin-top: 10px;
     height: 100px;
-    display: block;
+    background: #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    box-sizing: border-box;
+    &.uploader {
+      background-color: #fff;
+      border: 1px dashed #d9d9d9;
+    }
+    img {
+      width: 100px;
+      height: 100px;
+      border-radius: 6px;
+    }
+    .del-image {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      width: 20px;
+      height: 20px;
+      line-height: 20px;
+      background-color: #fff;
+      border-radius: 50%;
+    }
+  }
+}
+.del-image {
+  i {
+    font-size: 20px;
+    line-height: 20px;
+    color: #f00;
   }
 }
 .red {
