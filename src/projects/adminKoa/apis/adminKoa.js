@@ -40,5 +40,13 @@ export default {
       method: 'post',
       data: data
     })
+  },
+  // 上/下架商品
+  editShopStatus (data) {
+    return request({
+      url: '/api/editShopStatus',
+      method: 'post',
+      data: data
+    })
   }
 }

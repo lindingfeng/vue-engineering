@@ -1,26 +1,39 @@
 <template>
   <div class="shop-list-page">
+    <div class="tabs-collection">
+      <el-tabs v-model="activeTab" @tab-click="tabChange">
+        <el-tab-pane label="全部商品" name="2" />
+        <el-tab-pane label="上架商品" name="1" />
+        <el-tab-pane label="下架商品" name="0" />
+      </el-tabs>
+    </div>
     <div class="btn-collection">
       <el-button
+        v-if="shopList.length&&activeTab==0"
         size="small"
         type="danger"
         style="padding: 10px;"
+        @click="deleteTogether"
       >
         <i class="el-icon-delete" style="margin-right: 3px;"></i>
         批量删除
       </el-button>
       <el-button
+        v-if="shopList.length&&activeTab==0"
         size="small"
         type="success"
         style="padding: 10px;"
+        @click="editShopStatusTogether(1)"
       >
         <i class="el-icon-upload2" style="margin-right: 3px;"></i>
         批量上架
       </el-button>
       <el-button
+        v-if="shopList.length&&activeTab==1"
         size="small"
         type="warning"
         style="padding: 10px;"
+        @click="editShopStatusTogether(0)"
       >
         <i class="el-icon-download" style="margin-right: 3px;"></i>
         批量下架
@@ -97,11 +110,13 @@
           <el-button
             size="mini"
             type="primary"
+            :disabled="scope.row.shop_status == 1"
             @click="shopOperation(0, scope.row)"
           >编辑</el-button>
           <el-button
             size="mini"
             type="danger"
+            :disabled="scope.row.shop_status == 1"
             @click="shopOperation(1, scope.row)"
           >删除</el-button>
           <el-button
@@ -152,7 +167,7 @@
           <el-input size="small" v-model="form.shop_name" placeholder="请输入商品名称"></el-input>
         </el-form-item>
         <el-form-item label="商品分类" prop="shop_category_id" >
-          <el-select size="small" v-model="form.shop_category_id" placeholder="请选择商品分类" @blur="selectBlur">
+          <el-select size="small" v-model="form.shop_category_id" placeholder="请选择商品分类">
             <el-option
               v-for="(item, index) in categoryList"
               :label="item.category_name"
@@ -217,6 +232,8 @@
 <script>
 import {
   Button,
+  Tabs,
+  TabPane,
   Table,
   TableColumn,
   Dialog,
@@ -244,6 +261,8 @@ const initShop = {
 export default {
   components: {
     [Button.name]: Button,
+    [Tabs.name]: Tabs,
+    [TabPane.name]: TabPane,
     [Table.name]: Table,
     [TableColumn.name]: TableColumn,
     [Dialog.name]: Dialog,
@@ -297,6 +316,8 @@ export default {
       callback()
     }
     return {
+      activeTab: '2',
+      isLoaded: false,
       shopList: [],
       categoryList: [],
       selectList: [],
@@ -335,18 +356,16 @@ export default {
     }
   },
   methods: {
-    selectBlur () {
-      console.log('触发select的blur事件')
-      // this.$refs['form'].validateField('shop_category_id')
-    },
     /*
      * @description: 获取商品列表(API)
      * @author: lindingfeng
      * @date: 2019-08-04 21:26:19
     */
     async getShopList () {
+      this.isLoaded = true
       try {
         let ret = await this.$adminKoa.getShopList({
+          type: this.activeTab,
           pageIndex: this.currentPage,
           pageSize: this.pageSize
         })
@@ -360,6 +379,7 @@ export default {
       } catch (err) {
         console.log(err)
       }
+      this.isLoaded = false
     },
     /*
      * @description: 获取分类列表(API)
@@ -396,7 +416,6 @@ export default {
       if (this.shop_id) {
         params.shop_id = this.shop_id
       }
-      console.log(params)
       try {
         let ret = await this.$adminKoa.operationShop(params)
         if (+ret.data._errCode === 0) {
@@ -418,6 +437,44 @@ export default {
       } catch (err) {
         console.log(err)
       }
+    },
+    /*
+     * @description: 上/下架商品(API)
+     * @author: lindingfeng
+     * @date: 2019-08-07 20:53:08
+    */
+    async editShopStatus (shop_ids, shop_status) {
+      try {
+        let ret = await this.$adminKoa.editShopStatus({
+          shop_ids,
+          shop_status
+        })
+        if (+ret.data._errCode === 0) {
+          this.$message.success({
+            message: +shop_status === 1 ? '商品上架成功!' : '商品下架成功!',
+            duration: 1500
+          })
+          this.getShopList()
+        } else {
+          this.$message.error({
+            message: ret.data._errStr,
+            duration: 1500
+          })
+        }
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    /*
+     * @description: tab切换
+     * @author: lindingfeng
+     * @date: 2019-08-07 23:04:23
+    */
+    tabChange (e) {
+      this.shopList = []
+      this.selectList = []
+      this.pageIndex = 1
+      this.getShopList()
     },
     /*
      * @Description: 添加/编辑商品弹窗
@@ -486,7 +543,73 @@ export default {
           ]
         }
         this.dialogVisible = true
+      } else if (+type === 1) {
+        console.log('删除商品')
+      } else {
+        // 上/下架
+        this.$confirm(`是否确认${+type === 2 ? '上架' : '下架'}该商品?`, '提示', {
+          confirmButtonText: '确认',
+          cancelButtonText: '取消'
+        }).then(() => {
+          let shop_status = +type === 2 ? '1' : '0'
+          this.editShopStatus(item.shop_id, shop_status)
+        }).catch(() => {
+          console.log('已取消上下架操作')
+        })
       }
+    },
+    /*
+     * @description: 批量删除商品
+     * @author: lindingfeng
+     * @date: 2019-08-08 00:29:03
+    */
+    deleteTogether () {
+      let shop_ids = []
+      if (!this.selectList.length) {
+        this.$message.error({
+          message: `请选择需要批量删除的商品!`,
+          duration: 1500
+        })
+        return
+      }
+      this.$confirm(`是否确认删除所选商品?`, '提示', {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消'
+      }).then(() => {
+        this.selectList.forEach(ele => {
+          shop_ids.push(ele.shop_id)
+        })
+        console.log(shop_ids)
+        // this.editShopStatus(shop_ids.join(','), shop_status+'')
+      }).catch(() => {
+        console.log('已取消删除')
+      })
+    },
+    /*
+     * @description: 批量上/下架商品
+     * @author: lindingfeng
+     * @date: 2019-08-07 22:40:33
+    */
+    editShopStatusTogether (shop_status) {
+      let shop_ids = []
+      if (!this.selectList.length) {
+        this.$message.error({
+          message: `请选择需要批量${+shop_status === 1 ? '上架' : '下架'}的商品!`,
+          duration: 1500
+        })
+        return
+      }
+      this.$confirm(`是否确认${+shop_status === 1 ? '上架' : '下架'}所选商品?`, '提示', {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消'
+      }).then(() => {
+        this.selectList.forEach(ele => {
+          shop_ids.push(ele.shop_id)
+        })
+        this.editShopStatus(shop_ids.join(','), shop_status+'')
+      }).catch(() => {
+        console.log('已取消删除')
+      })
     },
     /*
      * @description: 上传成功回调
@@ -544,6 +667,13 @@ export default {
   }
   .el-input, .el-select {
     width: 350px;
+  }
+  /deep/ .el-tabs__header {
+    margin: 0;
+  }
+  /deep/ .el-button.is-disabled {
+    background-color: #dddddd;
+    border-color: transparent;
   }
 }
 .category-icon-content {
