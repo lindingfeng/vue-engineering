@@ -17,6 +17,14 @@ export default {
       data: data
     })
   },
+  // 删除商品
+  deleteShop (data) {
+    return request({
+      url: '/api/deleteShop',
+      method: 'post',
+      data: data
+    })
+  },
   // 获取商品分类列表
   getCategory (data) {
     return request({

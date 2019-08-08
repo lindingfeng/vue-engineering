@@ -26,7 +26,11 @@ html {
   background: #f1f1f1;
 }
 body {
+  height: 100%;
   overflow-x: hidden;
+}
+#app {
+  height: 100%;
 }
 .hidden {
   overflow: hidden !important;

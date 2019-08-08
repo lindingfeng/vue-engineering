@@ -177,7 +177,9 @@
           </el-select>
         </el-form-item>
         <el-form-item label="商品价格" prop="shop_price">
-          <el-input size="small" v-model="form.shop_price" placeholder="请输入商品价格"></el-input>
+          <el-input size="small" v-model="form.shop_price" placeholder="请输入商品价格">
+            <el-button size="small" slot="prepend">¥</el-button>
+          </el-input>
         </el-form-item>
         <el-form-item label="商品详情" prop="shop_content">
           <el-input size="small" v-model="form.shop_content" placeholder="请输入商品详情"></el-input>
@@ -218,7 +220,9 @@
           <el-input size="small" v-model="form.shop_num" placeholder="请输入商品库存"></el-input>
         </el-form-item>
         <el-form-item label="商品运费" prop="shop_freight">
-          <el-input size="small" v-model="form.shop_freight" placeholder="请输入商品运费"></el-input>
+          <el-input size="small" v-model="form.shop_freight" placeholder="请输入商品运费">
+             <el-button size="small" slot="prepend">¥</el-button>
+          </el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -439,6 +443,33 @@ export default {
       }
     },
     /*
+     * @Description: 单个/批量删除商品(API)
+     * @Author: lindingfeng
+     * @Date: 2019-08-08 10:29:53
+    */
+    async deleteShop (shop_ids) {
+      try {
+        let ret = await this.$adminKoa.deleteShop({
+          shop_ids
+        })
+        if (+ret.data._errCode === 0) {
+          this.$message.success({
+            message: '商品删除成功!',
+            duration: 1500
+          })
+          this.currentPage = 1
+          this.getShopList()
+        } else {
+          this.$message.error({
+            message: ret.data._errStr,
+            duration: 1500
+          })
+        }
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    /*
      * @description: 上/下架商品(API)
      * @author: lindingfeng
      * @date: 2019-08-07 20:53:08
@@ -544,9 +575,17 @@ export default {
         }
         this.dialogVisible = true
       } else if (+type === 1) {
-        console.log('删除商品')
+        // 删除商品
+        this.$confirm(`是否确认删除该商品?`, '提示', {
+          confirmButtonText: '确认',
+          cancelButtonText: '取消'
+        }).then(() => {
+          this.deleteShop(item.shop_id)
+        }).catch(() => {
+          console.log('已取消删除操作')
+        })
       } else {
-        // 上/下架
+        // 上/下架商品
         this.$confirm(`是否确认${+type === 2 ? '上架' : '下架'}该商品?`, '提示', {
           confirmButtonText: '确认',
           cancelButtonText: '取消'
@@ -579,8 +618,7 @@ export default {
         this.selectList.forEach(ele => {
           shop_ids.push(ele.shop_id)
         })
-        console.log(shop_ids)
-        // this.editShopStatus(shop_ids.join(','), shop_status+'')
+        this.deleteShop(shop_ids.join(','))
       }).catch(() => {
         console.log('已取消删除')
       })

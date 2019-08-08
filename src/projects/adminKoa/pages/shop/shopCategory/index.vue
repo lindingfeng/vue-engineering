@@ -96,7 +96,7 @@
         <el-form-item label="分类名称">
           <el-input size="small" v-model="form.category_name"></el-input>
         </el-form-item>
-        <el-form-item label="分类名称">
+        <el-form-item label="分类图标">
           <div class="category-icon-content">
             <!-- <div class="category-icon"></div> -->
             <el-upload
@@ -243,7 +243,7 @@ export default {
      * @Author: lindingfeng
      * @Date: 2019-08-05 15:20:10
     */
-   async deleteCategory (category_ids) {
+    async deleteCategory (category_ids) {
       try {
         let ret = await this.$adminKoa.deleteCategory({
           category_ids
