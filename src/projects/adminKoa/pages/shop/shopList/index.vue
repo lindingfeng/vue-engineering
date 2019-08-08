@@ -537,7 +537,7 @@ export default {
           // 验证通过
           this.operationShop()
         }
-      });
+      })
     },
     /*
      * @Description: 返回所有选中的数据(Array)

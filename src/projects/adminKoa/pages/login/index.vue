@@ -1,8 +1,9 @@
 <template>
   <div class="login-page">
     <div class="form-content">
-      <el-form ref="form" :model="form" label-width="80px">
-        <el-form-item required prop="account">
+      <h3>商城后台系统</h3>
+      <el-form ref="form" :model="form" :rules="formRules" label-width="80px">
+        <el-form-item prop="account">
           <div class="input-content">
             <span class="account-svg">
               <svg-icon icon-class="account"/>
@@ -14,7 +15,7 @@
             />
           </div>
         </el-form-item>
-        <el-form-item required prop="password">
+        <el-form-item prop="password">
           <div class="input-content">
             <span class="account-svg">
               <svg-icon icon-class="password"/>
@@ -23,11 +24,13 @@
               size="small"
               v-model="form.password"
               placeholder="请输入密码"
-              show-password
             />
           </div>
         </el-form-item>
       </el-form>
+      <div class="no-need-pwd">
+        <el-checkbox v-model="checked">7天免登陆</el-checkbox>
+      </div>
       <el-button
         type="primary"
         class="btn"
@@ -44,7 +47,9 @@ import {
   Form,
   FormItem,
   Input,
+  Checkbox
 } from 'element-ui'
+import Cookies from 'js-cookie'
 
 export default {
   components: {
@@ -52,6 +57,7 @@ export default {
     [Form.name]: Form,
     [FormItem.name]: FormItem,
     [Input.name]: Input,
+    [Checkbox.name]: Checkbox,
   },
   data () {
     return {
@@ -59,12 +65,56 @@ export default {
         account: '',
         password: ''
       },
+      checked: false,
+      formRules: {
+        account: [
+          { required: true, message: '请输入账号...', trigger: 'blur' }
+        ],
+        password: [
+          { required: true, message: '请输入密码...', trigger: 'blur' }
+        ]
+      },
       isLoading: false
     }
   },
   methods: {
-    submit () {
+    /*
+     * @description: 登陆
+     * @author: lindingfeng
+     * @date: 2019-08-09 00:10:20
+    */
+    async login () {
       this.isLoading = true
+      try {
+        let ret = await this.$adminKoa.login({
+          phone: this.form.account,
+          password: this.form.password
+        })
+        if (+ret.data._errCode === 0) {
+          this.$message.success({
+            message: '登陆成功!',
+            duration: 1500
+          })
+          Cookies.set('token', ret.data._data.token)
+          this.$router.replace('/')
+        } else {
+          this.$message.error({
+            message: ret.data._errStr,
+            duration: 1500
+          })
+        }
+      } catch (err) {
+        console.log(err)
+      }
+      this.isLoading = false
+    },
+    submit () {
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
+          // 验证通过
+          this.login()
+        }
+      })
     }
   }
 }
@@ -98,15 +148,30 @@ export default {
     background-color: #1890ff;
     border-color: #1890ff;
   }
+  /deep/ .el-checkbox__label {
+    padding-left: 5px;
+    font-size: 13px;
+    color: #eeeeee;
+  }
+  .no-need-pwd {
+    text-align: right;
+  }
   .btn {
     width: 100%;
+    margin-top: 10px;
   }
 }
 .form-content {
   position: relative;
   width: 520px;
-  padding: 160px 35px 0;
+  padding: 300px 35px 0;
   margin: 0 auto;
+  h3 {
+    margin-bottom: 40px;
+    text-align: center;
+    font-size: 26px;
+    color: #eee;
+  }
 }
 .input-content {
   border: 1px solid hsla(0,0%,100%,.1);
