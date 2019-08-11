@@ -25,7 +25,10 @@ service.interceptors.response.use(
   response => {
     // 登录态失效
     if (+response.data._errCode === 1010) {
-      store.push(`/login?back=${true}`)
+      setTimeout(() => {
+        Cookies.remove('token')
+        store.push(`/login?back=${true}`)
+      }, 1000)
     }
     return response;
   },

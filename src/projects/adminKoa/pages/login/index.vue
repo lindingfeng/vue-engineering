@@ -12,6 +12,7 @@
               size="small"
               v-model="form.account"
               placeholder="请输入账号"
+              @keyup.enter.native="submit"
             />
           </div>
         </el-form-item>
@@ -24,6 +25,7 @@
               size="small"
               v-model="form.password"
               placeholder="请输入密码"
+              @keyup.enter.native="submit"
             />
           </div>
         </el-form-item>
@@ -50,6 +52,11 @@ import {
   Checkbox
 } from 'element-ui'
 import Cookies from 'js-cookie'
+import {
+  defaults,
+  normal,
+  root
+} from '@@/permission/permission'
 
 export default {
   components: {
@@ -93,10 +100,27 @@ export default {
         if (+ret.data._errCode === 0) {
           this.$message.success({
             message: '登陆成功!',
-            duration: 1500
+            duration: 1000,
+            onClose: () => {
+              if (ret.data._data.role === 1) {
+                const router = [
+                  ...defaults,
+                  ...normal
+                ]
+                this.$router.options.routes = router
+                this.$router.addRoutes(normal)
+              } else if (ret.data._data.role === 2) {
+                const router = [
+                  ...defaults,
+                  ...root
+                ]
+                this.$router.options.routes = router
+                this.$router.addRoutes(root)
+              }
+              Cookies.set('token', ret.data._data.token)
+              this.$router.replace('/')
+            }
           })
-          Cookies.set('token', ret.data._data.token)
-          this.$router.replace('/')
         } else {
           this.$message.error({
             message: ret.data._errStr,
