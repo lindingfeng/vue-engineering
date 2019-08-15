@@ -102,22 +102,24 @@ export default {
             message: '登陆成功!',
             duration: 1000,
             onClose: () => {
+              console.log(defaults, normal, root)
               if (ret.data._data.role === 1) {
                 const router = [
-                  ...defaults,
-                  ...normal
+                  ...normal,
+                  ...defaults
                 ]
                 this.$router.options.routes = router
                 this.$router.addRoutes(normal)
               } else if (ret.data._data.role === 2) {
                 const router = [
-                  ...defaults,
-                  ...root
+                  ...root,
+                  ...defaults
                 ]
                 this.$router.options.routes = router
                 this.$router.addRoutes(root)
               }
               Cookies.set('token', ret.data._data.token)
+              Cookies.set('role', ret.data._data.role)
               this.$router.replace('/')
             }
           })
@@ -146,7 +148,7 @@ export default {
 
 <style lang="postcss" scoped>
 .login-page {
-  min-height: 100%;
+  min-height: 100vh ;
   width: 100%;
   background-color: #2d3a4b;
   overflow: hidden;

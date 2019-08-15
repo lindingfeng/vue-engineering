@@ -27,6 +27,7 @@ service.interceptors.response.use(
     if (+response.data._errCode === 1010) {
       setTimeout(() => {
         Cookies.remove('token')
+        Cookies.remove('role')
         store.push(`/login?back=${true}`)
       }, 1000)
     }

@@ -2,16 +2,31 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Cookies from 'js-cookie'
 import {
-  defaults
+  defaults,
+  normal,
+  root
 } from '@@/permission/permission'
 
 Vue.use(Router)
 
-// import Layout from '@@/pages/layout'
+let defaultRoute = []
+const role = Cookies.get('role')
+
+if (+role === 2) {
+  defaultRoute = [
+    ...root,
+    ...defaults
+  ]
+} else {
+  defaultRoute = [
+    ...normal,
+    ...defaults
+  ]
+}
 
 const router = new Router({
   // base: '/demo/',
-  routes: defaults
+  routes: defaultRoute
 })
 
 router.beforeEach((to, from, next) => {
