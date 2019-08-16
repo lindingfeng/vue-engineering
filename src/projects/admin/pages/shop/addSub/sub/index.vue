@@ -1,6 +1,6 @@
 <template>
   <div class="index-page">
-    index
+    sub
   </div>
 </template>
 
@@ -19,5 +19,8 @@ export default {
 </script>
 
 <style lang="postcss" scoped>
-
+.index-page {
+  height: 500px;
+  background-color: #fff;
+}
 </style>

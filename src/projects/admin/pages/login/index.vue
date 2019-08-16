@@ -95,7 +95,7 @@ export default {
     async login () {
       this.isLoading = true
       try {
-        let ret = await this.$adminKoa.login({
+        let ret = await this.$admin.login({
           phone: this.form.account,
           password: this.form.password
         })

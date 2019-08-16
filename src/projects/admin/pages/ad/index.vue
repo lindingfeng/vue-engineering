@@ -1,15 +1,14 @@
 <template>
-  <div class="index-page">
-    index
+  <div class="ad-page">
+    ad模块
   </div>
 </template>
 
 <script>
-import { Button } from 'element-ui'
 
 export default {
   components: {
-    [Button.name]: Button
+    // [Button.name]: Button
   },
   data () {
     return {

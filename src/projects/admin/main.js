@@ -4,8 +4,9 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from './store'
-// import adminApi from './apis/adminApi'
-
+import '@@/pages/layout/imgs'
+import admin from './apis/admin'
+import { Message, MessageBox } from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
 // 模拟接口数据(mock)
@@ -22,7 +23,9 @@ import 'element-ui/lib/theme-chalk/index.css'
 //   }
 // })
 
-// Vue.prototype.$adminApi = adminApi
+Vue.prototype.$message = Message
+Vue.prototype.$confirm = MessageBox.confirm;
+Vue.prototype.$admin = admin
 
 Vue.config.productionTip = false
 

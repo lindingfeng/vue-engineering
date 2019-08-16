@@ -368,7 +368,7 @@ export default {
     async getShopList () {
       this.isLoaded = true
       try {
-        let ret = await this.$adminKoa.getShopList({
+        let ret = await this.$admin.getShopList({
           type: this.activeTab,
           pageIndex: this.currentPage,
           pageSize: this.pageSize
@@ -395,7 +395,7 @@ export default {
     */
     async getCategory () {
       try {
-        let ret = await this.$adminKoa.getCategory({
+        let ret = await this.$admin.getCategory({
           pageIndex: this.currentPage
         })
         if (+ret.data._errCode === 0) {
@@ -424,7 +424,7 @@ export default {
         params.shop_id = this.shop_id
       }
       try {
-        let ret = await this.$adminKoa.operationShop(params)
+        let ret = await this.$admin.operationShop(params)
         if (+ret.data._errCode === 0) {
           this.dialogVisible = false
           this.$message.success({
@@ -452,7 +452,7 @@ export default {
     */
     async deleteShop (shop_ids) {
       try {
-        let ret = await this.$adminKoa.deleteShop({
+        let ret = await this.$admin.deleteShop({
           shop_ids
         })
         if (+ret.data._errCode === 0) {
@@ -479,7 +479,7 @@ export default {
     */
     async editShopStatus (shop_ids, shop_status) {
       try {
-        let ret = await this.$adminKoa.editShopStatus({
+        let ret = await this.$admin.editShopStatus({
           shop_ids,
           shop_status
         })
