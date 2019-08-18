@@ -58,11 +58,6 @@
       <el-table-column
         type="selection">
       </el-table-column>
-      <!-- <el-table-column width="70" label="序号">
-        <template slot-scope="scope">
-          <p>{{(currentPage - 1) * pageSize + (scope.$index+1)}}</p>
-        </template>
-      </el-table-column> -->
       <el-table-column label="商品名称">
         <template slot-scope="scope">
           <p class="shop-name">{{scope.row.shop_name}}</p>
