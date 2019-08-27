@@ -25,7 +25,8 @@ if (+role === 2) {
 }
 
 const router = new Router({
-  // base: '/demo/',
+  mode: 'history',
+  base: '/adminKoa/',
   routes: defaultRoute
 })
 

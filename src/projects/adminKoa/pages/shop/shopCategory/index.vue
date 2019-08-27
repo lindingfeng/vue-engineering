@@ -96,7 +96,7 @@
             <!-- <div class="category-icon"></div> -->
             <el-upload
               class="avatar-uploader"
-              action="http://132.232.35.229:3000/api/uploadfile"
+              action="https://api.lindf.com/api/uploadfile"
               :show-file-list="false"
               :on-success="uploadSuccess"
               :on-error="uploadError"

@@ -4,7 +4,7 @@ import store from '../router'
 
 // 创建axios实例
 const service = axios.create({
-  baseURL: 'http://132.232.35.229:3000',
+  baseURL: 'https://api.lindf.com',
   timeout: 10000
 })
 

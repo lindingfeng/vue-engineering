@@ -192,7 +192,7 @@
               <li class="uploader" v-if="showUploaderBtn">
                 <el-upload
                   class="avatar-uploader"
-                  action="http://132.232.35.229:3000/api/uploadfile"
+                  action="https://api.lindf.com/api/uploadfile"
                   multiple
                   accept="image/jpeg,image/png,image/jpg"
                   :show-file-list="false"
