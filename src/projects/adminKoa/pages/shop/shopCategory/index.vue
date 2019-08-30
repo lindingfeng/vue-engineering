@@ -96,7 +96,7 @@
             <!-- <div class="category-icon"></div> -->
             <el-upload
               class="avatar-uploader"
-              action="https://api.lindf.com/api/uploadfile"
+              action="https://api.lindf.com/api/qiniu"
               :show-file-list="false"
               :on-success="uploadSuccess"
               :on-error="uploadError"
