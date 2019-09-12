@@ -2,7 +2,8 @@ import axios from 'axios'
 
 // 创建axios实例
 const service = axios.create({
-  baseURL: 'http://localhost:3000',
+  // baseURL: 'http://132.232.35.229:7001',
+  baseURL: 'http://127.0.0.1:7001',
   timeout: 10000
 })
 

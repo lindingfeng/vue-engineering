@@ -1,6 +1,7 @@
 <template>
   <div class="index-page">
-    <van-button type="primary" style="width: 100%;" @click="$router.push('animation')">前往animation页面</van-button>
+    <van-button type="primary" style="width: 100%;margin-top: 12px;" @click="$router.push('animation')">前往animation页面</van-button>
+    <van-button type="primary" style="width: 100%;margin-top: 12px;" @click="login">登录</van-button>
     <!-- <Swiper /> -->
     <!-- <Amap /> -->
     <!-- <Clipboard /> -->
@@ -13,7 +14,7 @@
 import {
   Button
 } from 'vant';
-import axios from 'axios'
+import apis from '@@/apis/demoApi'
 // import Swiper from '@@/components/Swiper'
 // import Amap from '@@/components/Amap'
 // import Clipboard from '@@/components/Clipboard'
@@ -34,6 +35,12 @@ export default {
     }
   },
   methods: {
+    async login () {
+      let ret = await apis.login()
+    }
+  },
+  async mounted () {
+    let ret = await apis.getShopList()
   }
 }
 </script>
