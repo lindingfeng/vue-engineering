@@ -8,13 +8,13 @@
 ├─build  webpack构建目录
 ├─config  webpack配置目录
 ├─dist  打包目录
-│  └─demo  项目目录
+│  └─admin  PC项目目录
+│  └─mobile  H5项目目录
 │     ├─static
-│     │  └─demo
-│     │     ├─js
-│     │     ├─css
-│     │     ├─fonts
-│     │     └─img
+│     │  ├─js
+│     │  ├─css
+│     │  ├─fonts
+│     │  └─img
 │     └─index.html
 ├─src  开发目录
 │  ├─apis  通用接口目录
@@ -25,7 +25,8 @@
 │  │  ├─css
 │  │  └─js
 │  ├─projects  项目总目录
-│  │  └─demo  项目目录
+│  │  └─admin  PC项目目录
+│  │  └─mobile  H5项目目录
 │  │     ├─apis  项目接口目录
 │  │     ├─assets  项目静态文件目录
 │  │     ├─components  项目组件目录

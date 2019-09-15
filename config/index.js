@@ -41,7 +41,7 @@ module.exports = {
     assetsPublicPath: `/dist/${projectName}/`,
     proxyTable: {},
     host: '0.0.0.0', // can be overwritten by process.env.HOST
-    port: 8090, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
+    port: `${getParamFromCLI()._[1] || 8090}`, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: true,
     errorOverlay: true,
     notifyOnErrors: true,
