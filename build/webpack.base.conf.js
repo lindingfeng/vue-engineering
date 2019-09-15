@@ -65,9 +65,9 @@ module.exports = {
         }
       },
       {
-        test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+        test: /\.(png|jpe?g|gif)(\?.*)?$/,
         loader: 'url-loader',
-        exclude: [resolve(`./src/projects/${process.env.projectName}`)],
+        include: [resolve(`./src`)],
         options: {
           limit: 10000,
           name: utils.assetsPath('img/[name].[hash:7].[ext]')

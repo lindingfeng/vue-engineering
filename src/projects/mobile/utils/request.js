@@ -1,5 +1,4 @@
 import axios from 'axios'
-import Cookies from 'js-cookie'
 
 // 创建axios实例
 const service = axios.create({
@@ -10,7 +9,6 @@ const service = axios.create({
 // request拦截器
 service.interceptors.request.use(
   config => {
-    config.data.token = Cookies.get('token')
     return config
   },
   error => {

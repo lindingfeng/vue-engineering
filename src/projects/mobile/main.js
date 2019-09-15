@@ -4,9 +4,15 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from './store'
-import admin from './apis/admin'
-import { Message, MessageBox } from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
+import mobileApi from './apis/mobileApi'
+
+// 解决移动端click延迟300ms
+// import FastClick from 'fastclick'
+// FastClick.attach(document.body)
+
+// 移动端调试工具
+// import VConsole from 'vconsole/dist/vconsole.min.js'
+// new VConsole()
 
 // 模拟接口数据(mock)
 // import './mock'
@@ -22,9 +28,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 //   }
 // })
 
-Vue.prototype.$message = Message
-Vue.prototype.$confirm = MessageBox.confirm;
-Vue.prototype.$admin = admin
+Vue.prototype.$mobileApi = mobileApi
 
 Vue.config.productionTip = false
 
@@ -33,6 +37,7 @@ new Vue({
   el: '#app',
   router,
   store,
+  // i18n,
   components: { App },
   template: '<App/>'
 })
