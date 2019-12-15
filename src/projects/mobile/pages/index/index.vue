@@ -1,6 +1,6 @@
 <template>
   <div class="index-page">
-    <van-button type="primary" style="width: 100%;" @click="login">成功按钮1111</van-button>
+    <van-button type="primary" style="width: 100%;" @click="login">成功按钮111</van-button>
     <!-- <Swiper /> -->
     <!-- <Amap /> -->
     <!-- <Clipboard /> -->
