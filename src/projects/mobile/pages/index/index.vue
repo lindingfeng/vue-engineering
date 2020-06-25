@@ -1,10 +1,10 @@
 <template>
   <div class="index-page">
-    <van-button type="primary" style="width: 100%;" @click="login">成功按钮777</van-button>
+    <van-button type="primary" style="width: 100%;" @click="login">成功按钮</van-button>
     <!-- <Swiper /> -->
     <!-- <Amap /> -->
     <!-- <Clipboard /> -->
-    <!-- <QRCode /> -->`
+    <!-- <QRCode /> -->
     <!-- <Sign /> -->
   </div>
 </template>
